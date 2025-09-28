@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
   <title>Tabibi - طبيبي</title>
   <style>
-  
     * {
       padding: 0;
       margin: 0;
@@ -15,20 +14,63 @@
     html, body {
       height: 100%;
       width: 100%;
-      overflow: hidden; /* لمنع التمرير غير الضروري */
+      overflow: hidden;
+      position: fixed;
     }
     
     iframe {
-      padding: 0;
-      margin: 0;
-      height: 100vh; /* استخدام ارتفاع النافذة المرئية */
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
       border: 0;
-      display: block; /* للتأكد من عدم وجود مسافات إضافية */
+      display: block;
     }
   </style>
 </head>
 <body>
-  <iframe src="landing.html" title="Tabibi - طبيبي"></iframe>
+  <iframe src="landing.html" title="Tabibi - طبيبي" id="mainFrame"></iframe>
+
+  <!-- إضافة Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    // تهيئة Telegram WebApp
+    Telegram.WebApp.ready();
+    
+    // توسيع الإطار لملء الشاشة بالكامل
+    Telegram.WebApp.expand();
+    
+    // منع إغلاق التطبيق بالسحب لأسفل
+    Telegram.WebApp.disableVerticalSwipes();
+    
+    // تعطيل التأثيرات المرئية عند السحب (اختياري)
+    Telegram.WebApp.enableClosingConfirmation();
+    
+    // تأكد من أن الإطار يأخذ الحجم الكامل
+    document.addEventListener('DOMContentLoaded', function() {
+      const iframe = document.getElementById('mainFrame');
+      
+      function resizeIframe() {
+        iframe.style.width = window.innerWidth + 'px';
+        iframe.style.height = window.innerHeight + 'px';
+      }
+      
+      // تحديد الحجم ابتداءً
+      resizeIframe();
+      
+      // تحديث الحجم عند تغيير حجم النافذة
+      window.addEventListener('resize', resizeIframe);
+    });
+
+    // إعدادات إضافية لتحسين التجربة
+    Telegram.WebApp.setHeaderColor('#secondaryBgColor');
+    Telegram.WebApp.setBackgroundColor('#ffffff');
+    
+    // للتأكد من أن التطبيق يفتح بالحجم الكامل على جميع الأجهزة
+    setTimeout(function() {
+      Telegram.WebApp.expand();
+    }, 100);
+  </script>
 </body>
 </html>
