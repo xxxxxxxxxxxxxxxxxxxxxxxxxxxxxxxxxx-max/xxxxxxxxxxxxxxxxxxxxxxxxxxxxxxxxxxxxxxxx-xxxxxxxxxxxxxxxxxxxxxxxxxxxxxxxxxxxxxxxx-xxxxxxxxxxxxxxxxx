@@ -1,31 +1,51 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>قسم القصة السريرية - طبيبي</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+  <title>قسم القصة السريرية — طبيبي</title>
+  <script src="https://js.puter.com/v2/"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* CSS Variables للـThemes (مدمج من dashboard.html مع الصفحة الحالية) */
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    /* CSS Variables للـThemes (مدمج ومحسن من prescriptions.html وdashboard.html) */
     :root {
-      --bg-color: #f5f7fa;
+      /* Light Mode (افتراضي) */
+      --bg-color: #f5f7fb;
       --card-bg: #ffffff;
-      --text-color: #333;
-      --secondary-text: #666;
+      --text-color: #111827;
+      --secondary-text: #6b7280;
       --border-color: #d1d5db;
       --primary-blue: #1e88e5;
       --button-bg: #1e88e5;
-      --button-hover: #1565c0;
+      --button-hover: #0d9488;
       --secondary-button-bg: #f1f1f1;
       --secondary-button-hover: #ddd;
-      --success-green: #4caf50;
-      --shadow-light: rgba(0,0,0,0.05);
+      --notice-bg: #fff7ed;
+      --notice-border: #f59e0b;
+      --notice-text: #92400e;
+      --danger-bg: #fee2e2;
+      --danger-border: #ef4444;
+      --danger-text: #dc2626;
+      --pre-bg: #0f172a;
+      --pre-text: #f8fafc;
+      --shadow-light: rgba(0,0,0,.08);
+      --table-border: #e5e7eb;
+      --table-even: #f9fafb;
       --icon-color: #1e88e5;
-      --animated-text-color: #60a5fa;
+      --spinner-border: rgba(0,0,0,0.08);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #60a5fa; /* لون النص المتحرك */
+      --info-box-bg: #f1f1f1; /* للـ info-boxes في light، مشابه dashboard */
+      --info-box-shadow: rgba(0,0,0,0.05); /* للـ shadow في light */
+      --success-green: #4caf50;
     }
 
     [data-theme="dark"] {
+      /* Dark Mode */
       --bg-color: #121212;
       --card-bg: #1e1e1e;
       --text-color: #e0e0e0;
@@ -33,45 +53,63 @@
       --border-color: #4b5563;
       --primary-blue: #0d47a1;
       --button-bg: #0d47a1;
-      --button-hover: #1565c0;
+      --button-hover: #0f766e;
       --secondary-button-bg: #2a2a2a;
       --secondary-button-hover: #3a3a3a;
-      --success-green: #388e3c;
+      --notice-bg: #7c2d12;
+      --notice-border: #dc2626;
+      --notice-text: #fecaca;
+      --danger-bg: #991b1b;
+      --danger-border: #b91c1c;
+      --danger-text: #fca5a5;
+      --pre-bg: #374151;
+      --pre-text: #f3f4f6;
       --shadow-light: rgba(255,255,255,0.05);
+      --table-border: #374151;
+      --table-even: #1f2937;
       --icon-color: #90caf9;
-      --animated-text-color: #a5b4fc;
+      --spinner-border: rgba(255,255,255,0.1);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #a5b4fc; /* لون النص المتحرك في الدارك */
+      --info-box-bg: #2a2a2a; /* للـ info-boxes في dark، مشابه dashboard */
+      --info-box-shadow: rgba(255,255,255,0.05); /* للـ shadow في dark */
+      --success-green: #388e3c;
     }
-  /* منع تحديد النص في كامل الموقع */
- * {
-    -webkit-user-select: none;  /* Safari */
-    -moz-user-select: none;     /* Firefox */
-    -ms-user-select: none;      /* Internet Explorer/Edge */
-    user-select: none;          /* Non-prefixed version */
- }
 
-/* استثناء لحقول الإدخال والنصوص حتى يتمكن المستخدم من الكتابة */
-input, textarea, [contenteditable="true"] {
-    -webkit-user-select: text;  /* Safari */
-    -moz-user-select: text;     /* Firefox */
-    -ms-user-select: text;      /* Internet Explorer/Edge */
-    user-select: text;          /* Non-prefixed version */
- }
+    /* منع تحديد النص في كامل الموقع */
+    * {
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none;  /* Safari */
+      -khtml-user-select: none;   /* Konqueror HTML */
+      -moz-user-select: none;     /* Firefox */
+      -ms-user-select: none;      /* Internet Explorer/Edge */
+      user-select: none;          /* Non-prefixed version */
+    }
 
+    /* استثناء للحقول حتى يتمكن المستخدم من الكتابة */
+    input, textarea, select, [contenteditable="true"] {
+      -webkit-user-select: text;  /* Safari */
+      -moz-user-select: text;     /* Firefox */
+      -ms-user-select: text;      /* Internet Explorer/Edge */
+      user-select: text;          /* Non-prefixed version */
+    }
 
     body {
-      margin: 0;
       font-family: 'Tajawal', sans-serif;
       background: var(--bg-color);
+      margin: 0;
       color: var(--text-color);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     a { text-decoration: none; }
 
-    /* الهيدر (مدمج من dashboard.html مع تعديل: زر رجوع) */
+    /* الهيدر (مدمج من prescriptions.html مع تعديل: زر رجوع) */
     header {
       background: var(--primary-blue);
       color: #fff;
@@ -126,7 +164,7 @@ input, textarea, [contenteditable="true"] {
       background: var(--secondary-button-hover);
     }
 
-    /* الفوتر (مدمج من dashboard.html) */
+    /* الفوتر (مدمج من prescriptions.html) */
     footer {
       text-align: center;
       padding: 15px;
@@ -139,46 +177,284 @@ input, textarea, [contenteditable="true"] {
 
     main {
       flex: 1;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
+      padding: 20px 0;
     }
 
-    /* النص المتحرك */
-    #typing-phrase {
-      font-size: 22px;
-      font-weight: bold;
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      padding: 18px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* النص المتحرك متعدد المقاطع في الـHeader (محسن من prescriptions.html مع shimmer) */
+    .animated-phrase {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
       color: var(--animated-text-color);
       margin: 20px auto;
       padding: 15px 20px;
       border-radius: 25px;
       background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05));
+      backdrop-filter: blur(10px);
       min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
-      text-align: center;
-      box-sizing: border-box;
     }
 
-    [data-theme="dark"] #typing-phrase {
+    [data-theme="dark"] .animated-phrase {
       background: linear-gradient(135deg, rgba(165, 180, 252, 0.1), rgba(165, 180, 252, 0.05));
     }
 
-    #typing-phrase.show {
+    .animated-phrase.show {
       opacity: 1;
       animation: fadeGlow 3s ease-in-out infinite;
     }
 
-    @keyframes fadeGlow {
-      0%, 100% { opacity: 0.6; transform: scale(1); text-shadow: 0 0 5px rgba(96, 165, 250, 0.3); }
-      50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
+    .animated-phrase::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s linear infinite;
+      opacity: 0;
     }
 
-    /* مربعات التاريخ والعد */
+    .animated-phrase.show::before {
+      opacity: 1;
+    }
+
+    @keyframes fadeGlow {
+      0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(96, 165, 250, 0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.02);
+        text-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+      }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    h1 i {
+      font-size: 1.5rem;
+      color: var(--icon-color);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+
+    h2 i {
+      font-size: 1.2rem;
+      color: var(--icon-color);
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text-color);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      box-sizing: border-box;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      background: var(--button-bg);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn.secondary {
+      background: var(--secondary-button-bg);
+      color: var(--text-color); /* للتوافق مع dark */
+    }
+
+    .btn.secondary:hover {
+      background: var(--secondary-button-hover);
+    }
+
+    .btn-green {
+      background: var(--success-green);
+      color: #fff;
+    }
+
+    .btn-green:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      background: var(--border-color);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn i {
+      font-size: 1.1rem;
+    }
+
+    .muted {
+      color: var(--secondary-text);
+      font-size: 13px;
+    }
+
+    .notice {
+      background: var(--notice-bg);
+      border-left: 4px solid var(--notice-border);
+      padding: 10px;
+      border-radius: 6px;
+      color: var(--notice-text);
+      font-size: 13px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notice i {
+      font-size: 1.1rem;
+      color: var(--notice-border);
+    }
+
+    .danger {
+      background: var(--danger-bg);
+      border-left: 4px solid var(--danger-border);
+      color: var(--danger-text);
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .danger i {
+      font-size: 1.1rem;
+      color: var(--danger-border);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      overflow: auto;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid var(--spinner-border);
+      border-top-color: var(--primary-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* مربعات التاريخ والعد (مثل prescriptions.html تمامًا) */
     .info-boxes {
       display: flex;
       justify-content: space-around;
@@ -189,10 +465,10 @@ input, textarea, [contenteditable="true"] {
 
     .info-boxes div {
       flex: 1;
-      background: var(--secondary-button-bg);
+      background: var(--info-box-bg);
       padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 2px 6px var(--shadow-light);
+      box-shadow: 0 2px 6px var(--info-box-shadow);
       transition: background-color 0.3s, box-shadow 0.3s;
     }
 
@@ -219,56 +495,7 @@ input, textarea, [contenteditable="true"] {
       color: var(--text-color);
     }
 
-    /* الأزرار */
-    .card {
-      background: var(--card-bg);
-      padding: 20px;
-      margin: 20px auto;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px var(--shadow-light);
-      text-align: center;
-      transition: background-color 0.3s, box-shadow 0.3s;
-    }
-
-    .btn {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px 18px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-      transition: background-color 0.3s, transform 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-green {
-      background: var(--success-green);
-      color: #fff;
-    }
-
-    .btn-green:hover {
-      background: #45a049;
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: var(--secondary-button-bg);
-      color: var(--text-color);
-    }
-
-    .btn-secondary:hover {
-      background: var(--secondary-button-hover);
-      transform: translateY(-2px);
-    }
-
-    /* الـ Modal */
+    /* الـ Modal (محسن من الكود الأصلي) */
     .modal {
       display: none;
       position: fixed;
@@ -314,12 +541,12 @@ input, textarea, [contenteditable="true"] {
       display: block;
       padding: 14px 20px;
       border-radius: 10px;
-      text-decoration: none; /* إزالة الخط من تحت الروابط */
+      text-decoration: none;
       font-size: 16px;
       font-weight: bold;
       text-align: center;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px var(--shadow-light);
       border: 2px solid transparent;
       color: #fff;
       position: relative;
@@ -328,8 +555,8 @@ input, textarea, [contenteditable="true"] {
 
     .modal-link:hover {
       transform: translateY(-3px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      text-decoration: none; /* التأكيد على عدم وجود خط */
+      box-shadow: 0 4px 15px var(--shadow-light);
+      text-decoration: none;
     }
 
     .modal-link i {
@@ -362,24 +589,107 @@ input, textarea, [contenteditable="true"] {
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Responsive */
+    /* Responsive تحسين للموبايل (مثل prescriptions.html) */
     @media (max-width: 768px) {
       header { padding: 10px 15px; }
       header h1 { font-size: 20px; }
       #back-btn { font-size: 18px; padding: 8px 12px; }
-      .info-boxes { flex-direction: column; }
-      #typing-phrase { font-size: 18px; padding: 10px 15px; min-height: 50px; margin: 10px auto; }
-      .btn { width: 100%; margin: 5px 0; }
-      main { padding: 10px; }
-      .modal-content { width: 95%; padding: 15px; }
-      .modal-link { padding: 12px 15px; font-size: 15px; }
+      main { padding: 10px 0; }
+      .wrap {
+        margin: 0 auto;
+        padding: 10px;
+      }
+      .cols-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .animated-phrase {
+        font-size: 16px;
+        padding: 10px 15px;
+        min-height: 50px;
+      }
+
+      .info-boxes {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .info-boxes div {
+        padding: 12px;
+      }
+
+      .info-boxes h4 {
+        font-size: 14px;
+      }
+
+      .info-boxes p {
+        font-size: 15px;
+      }
+
+      .btn {
+        width: 100%;
+        margin: 5px 0;
+      }
+
+      .modal-content { 
+        width: 95%; 
+        padding: 15px; 
+      }
+      
+      .modal-link { 
+        padding: 12px 15px; 
+        font-size: 15px; 
+      }
+
       footer { padding: 10px; font-size: 12px; }
     }
 
-    /* Dark Mode تحسينات (مدمج من dashboard.html) */
-    [data-theme="dark"] .info-boxes div {
+    /* Dark Mode تحسينات (مدمج ومحسن من prescriptions.html) */
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    [data-theme="dark"] input::placeholder,
+    [data-theme="dark"] textarea::placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input::-webkit-input-placeholder,
+    [data-theme="dark"] textarea::-webkit-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input:-ms-input-placeholder,
+    [data-theme="dark"] textarea:-ms-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input[readonly],
+    [data-theme="dark"] input[readonly="readonly"] {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] #back-btn {
       background: var(--secondary-button-bg);
-      box-shadow: 0 2px 6px var(--shadow-light);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #back-btn:hover {
+      background: var(--secondary-button-hover);
+    }
+
+    [data-theme="dark"] .info-boxes div {
+      background: var(--info-box-bg);
+      box-shadow: 0 2px 6px var(--info-box-shadow);
     }
 
     [data-theme="dark"] .info-boxes h4 {
@@ -418,111 +728,80 @@ input, textarea, [contenteditable="true"] {
     }
 
     [data-theme="dark"] .modal-link {
-      box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+      box-shadow: 0 2px 8px var(--shadow-light);
     }
 
     [data-theme="dark"] .modal-link:hover {
-      box-shadow: 0 4px 15px rgba(255,255,255,0.15);
-    }
-
-    [data-theme="dark"] input,
-    [data-theme="dark"] select,
-    [data-theme="dark"] textarea {
-      background: var(--card-bg) !important;
-      color: var(--text-color) !important;
-      border-color: var(--border-color) !important;
-    }
-
-    [data-theme="dark"] input::placeholder,
-    [data-theme="dark"] textarea::placeholder {
-      color: var(--secondary-text) !important;
-    }
-
-    [data-theme="dark"] input::-webkit-input-placeholder,
-    [data-theme="dark"] textarea::-webkit-input-placeholder {
-      color: var(--secondary-text) !important;
-    }
-
-    [data-theme="dark"] input:-ms-input-placeholder,
-    [data-theme="dark"] textarea:-ms-input-placeholder {
-      color: var(--secondary-text) !important;
-    }
-
-    [data-theme="dark"] input[readonly],
-    [data-theme="dark"] input[readonly="readonly"] {
-      background: var(--card-bg) !important;
-      color: var(--text-color) !important;
-    }
-
-    [data-theme="dark"] #back-btn {
-      background: var(--secondary-button-bg);
-      color: var(--text-color);
-    }
-
-    [data-theme="dark"] #back-btn:hover {
-      background: var(--secondary-button-hover);
+      box-shadow: 0 4px 15px var(--shadow-light);
     }
   </style>
 </head>
-<body data-theme="light">
+<body data-theme="light">  <!-- افتراضي light، يتغير تلقائيًا -->
 
-  <!-- الهيدر (مدمج ومعدل من dashboard.html) -->
+  <!-- الهيدر (مدمج ومعدل من prescriptions.html) -->
   <header>
     <div class="logo">
       <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
       <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
     </div>
     <button id="back-btn">
-      <i class="fas fa-arrow-left"></i>    
+      <i class="fas fa-arrow-left"></i>  
     </button>
   </header>
 
   <main>
-    <!-- النص المتحرك -->
-    <div id="typing-phrase"></div>
-
-    <!-- مربعات المعلومات -->
-    <div class="info-boxes">
-      <div>
-        <h4><i class="fas fa-clock"></i>تاريخ اليوم</h4>
-        <p id="today-date"></p>
+    <div class="wrap">
+      <div class="card">
+        <h1><i class="fas fa-clipboard-list"></i> قسم القصة السريرية</h1>
+        <!-- النص المتحرك متعدد المقاطع -->
+        <div class="animated-phrase" id="animatedPhrase"></div>
       </div>
-      <div>
-        <h4><i class="fas fa-file-medical"></i>عدد القصص</h4>
-        <p id="story-count">0</p>
-      </div>
-    </div>
 
-    <!-- الأزرار (أزلت زر تحميل القصة، حافظت على زر إضافة فقط) -->
-    <div class="card">
-      <button class="btn btn-green" id="addStoryBtn">
-        <i class="fas fa-plus"></i>إضافة قصة سريرية جديدة
-      </button>
+      <!-- مربعات التاريخ والعد (مثل prescriptions.html تمامًا) -->
+      <div class="card">
+        <div class="info-boxes">
+          <div>
+            <h4><i class="fas fa-clock"></i> تاريخ اليوم</h4>
+            <p id="today-date"></p>
+          </div>
+          <div>
+            <h4><i class="fas fa-file-medical"></i> عدد القصص</h4>
+            <p id="story-count">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- الأزرار (محسن للتوافق) -->
+      <div class="card">
+        <button class="btn btn-green" id="addStoryBtn">
+          <i class="fas fa-plus"></i> إضافة قصة سريرية جديدة
+        </button>
+      </div>
     </div>
   </main>
 
   <!-- الـ Modal لأنواع القصص -->
   <div class="modal" id="storyModal">
     <div class="modal-content">
-      <h3>لمن القصة؟</h3>
+      <h3><i class="fas fa-question-circle" style="margin-left: 0.5rem; color: var(--icon-color);"></i> لمن القصة؟</h3>
       <div class="modal-links">
         <a href="stories/internal.html" class="modal-link primary">
-          <i class="fas fa-user-md"></i>داخلية عامة / جراحة
+          <i class="fas fa-user-md"></i> داخلية عامة / جراحة
         </a>
         <a href="stories/neonatal.html" class="modal-link primary">
-          <i class="fas fa-baby"></i>أطفال
+          <i class="fas fa-baby"></i> أطفال
         </a>
         <a href="stories/gyncology.html" class="modal-link primary">
-          <i class="fas fa-female"></i>نسائية
+          <i class="fas fa-female"></i> نسائية
         </a>
         <a href="#" class="modal-link cancel" id="closeModal">
-          <i class="fas fa-times"></i>إلغاء
+          <i class="fas fa-times"></i> إلغاء
         </a>
       </div>
     </div>
   </div>
 
-  <!-- الفوتر (مدمج من dashboard.html) -->
+  <!-- الفوتر (مدمج من prescriptions.html) -->
   <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
 
   <script>
@@ -540,31 +819,32 @@ input, textarea, [contenteditable="true"] {
       }
     });
 
-    // النصوص المتحركة (شملت النص المطلوب)
+    // النص المتحرك متعدد المقاطع (محسن من prescriptions.html)
     const phrases = [
       "<i class='fas fa-stethoscope'></i> مرحباً بك في قسم القصة السريرية في تطبيق طبيبي",
       "<i class='fas fa-user-md'></i> هنا يمكنك أخذ القصة السريرية بكل احترافية",
       "<i class='fas fa-brain'></i> وتحليلها باستخدام أحدث تقنيات الذكاء الصنعي"
     ];
     let phraseIndex = 0;
-    const typingPhrase = document.getElementById("typing-phrase");
-    function showPhrase() {
-      typingPhrase.classList.remove("show");
-      setTimeout(() => {
-        typingPhrase.innerHTML = phrases[phraseIndex];
-        typingPhrase.classList.add("show");
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-      }, 500);
-    }
-    setInterval(showPhrase, 4000);
-    showPhrase(); // تشغيل أول نص
+    const animatedPhrase = document.getElementById("animatedPhrase");
 
-    // عرض تاريخ اليوم الحالي
+    function showPhrase() {
+      animatedPhrase.classList.remove("show");
+      setTimeout(() => {
+        animatedPhrase.innerHTML = phrases[phraseIndex];
+        animatedPhrase.classList.add("show");
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }, 500);  // fade out delay
+    }
+    setInterval(showPhrase, 4000);  // تغيير كل 4 ثواني
+    showPhrase();  // عرض الأول فورًا
+
+    // عرض تاريخ اليوم (مثل prescriptions.html تمامًا، تاريخ فقط بدون وقت)
     const todayDate = document.getElementById("today-date");
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    todayDate.textContent = new Date().toLocaleDateString('ar-EG', options); // مثل: ٢٥ سبتمبر ٢٠٢٥
+    todayDate.textContent = new Date().toLocaleDateString('ar-EG', options);
 
-    // عدّ القصص السريرية
+    // عدّ القصص السريرية (مثل rx-count في prescriptions)
     let storyCount = 0;
     const storyCountElement = document.getElementById("story-count");
     const addStoryBtn = document.getElementById("addStoryBtn");
@@ -593,25 +873,32 @@ input, textarea, [contenteditable="true"] {
       }
     });
 
-    // Dark Mode تلقائي
+    // كود الـDark Mode التلقائي (مثل prescriptions.html)
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
     }
+
+    // كشف تلقائي عند التحميل
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(prefersDark ? 'dark' : 'light');
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => applyTheme(e.matches ? 'dark' : 'light'));
+
+    // استجابة لتغيير تفضيلات النظام (تلقائي)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches ? 'dark' : 'light');
+    });
   </script>
   <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const internalLinks = document.querySelectorAll('a[href*="localhost"], a[href*=".html"]');
-    
-    internalLinks.forEach(link => {
+    // منع الـ Context Menu على الروابط الداخلية (من الكود الأصلي)
+    document.addEventListener('DOMContentLoaded', function() {
+      const internalLinks = document.querySelectorAll('a[href*="localhost"], a[href*=".html"]');
+      
+      internalLinks.forEach(link => {
         link.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
+          e.preventDefault();
+          return false;
         });
+      });
     });
-});
-</script>
+  </script>
 </body>
 </html>
