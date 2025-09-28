@@ -1074,24 +1074,49 @@ input, textarea, select, [contenteditable="true"] {
     // تعديل: إزالة media query التلقائي، والاعتماد على initTheme() في JS (مثل admin)
   </script>
   <script>
-// منع قائمة السياق (الضغطة المطولة) على جميع الروابط (غير)
+// حل متقدم لـ Telegram MiniApp
 document.addEventListener('DOMContentLoaded', function() {
+    // اكتشاف إذا كان في Telegram WebView
+    const isTelegramWebView = window.Telegram && Telegram.WebApp;
+    
     const links = document.querySelectorAll('a');
     
     links.forEach(link => {
+        const originalHref = link.getAttribute('href');
+        
+        if (originalHref && !originalHref.startsWith('#') && !originalHref.startsWith('javascript:')) {
+            // إزالة href مؤقتًا وإضافة data-href بدلاً منه
+            link.setAttribute('data-href', originalHref);
+            link.removeAttribute('href');
+            link.style.cursor = 'pointer';
+            
+            // إضافة event listener للنقر
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('data-href');
+                
+                if (isTelegramWebView) {
+                    // استخدم Telegram WebApp API إذا متاح
+                    Telegram.WebApp.openLink(href);
+                } else {
+                    // استخدم window.open للبيئات الأخرى
+                    window.open(href, '_blank');
+                }
+                return false;
+            });
+        }
+        
+        // منع قائمة السياق
         link.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
         
-        // منع أيضًا حدث touch الطويل (للهواتف)
+        // منع اللمس الطويل
         link.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 0) {
-                const touch = e.touches[0];
-                this.longPressTimer = setTimeout(() => {
-                    e.preventDefault();
-                }, 500);
-            }
+            this.longPressTimer = setTimeout(() => {
+                e.preventDefault();
+            }, 300);
         });
         
         link.addEventListener('touchend', function(e) {
@@ -1102,6 +1127,34 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(this.longPressTimer);
         });
     });
+});
+
+// حل احتياطي إضافي
+window.addEventListener('load', function() {
+    document.body.addEventListener('click', function(e) {
+        let target = e.target;
+        
+        // ابحث عن أقرب رابط
+        while (target && target !== document.body) {
+            if (target.tagName === 'A') {
+                const href = target.getAttribute('href') || target.getAttribute('data-href');
+                
+                if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (window.Telegram && Telegram.WebApp) {
+                        Telegram.WebApp.openLink(href);
+                    } else {
+                        window.open(href, '_blank');
+                    }
+                    return false;
+                }
+                break;
+            }
+            target = target.parentNode;
+        }
+    }, true);
 });
 </script>
 
