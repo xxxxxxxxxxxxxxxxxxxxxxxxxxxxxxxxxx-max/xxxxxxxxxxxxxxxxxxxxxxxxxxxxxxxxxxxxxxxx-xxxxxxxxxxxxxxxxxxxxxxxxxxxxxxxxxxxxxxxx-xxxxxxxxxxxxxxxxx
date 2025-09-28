@@ -249,7 +249,8 @@ input, textarea, select, [contenteditable="true"] {
       margin: 15px 0;
     }
 
-    aside nav ul li a {
+    /* تعديل: تحويل a إلى button - نفس الـ CSS للـ style */
+    aside nav ul li button {
       color: var(--icon-color);
       text-decoration: none;
       font-size: 16px;
@@ -260,15 +261,19 @@ input, textarea, select, [contenteditable="true"] {
       transition: 0.2s;
       border-radius: 6px;
       cursor: pointer; /* لتحسين التفاعل */
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: right;
     }
 
-    aside nav ul li a:hover {
+    aside nav ul li button:hover {
       background: var(--secondary-button-bg);
       color: var(--primary-blue);
     }
 
     /* أيقونة قفل للأقسام المغلقة */
-    aside nav ul li a.locked::before {
+    aside nav ul li button.locked::before {
       content: '\f023'; /* fa-lock */
       font-family: 'Font Awesome 6 Free';
       font-weight: 900;
@@ -551,7 +556,7 @@ input, textarea, select, [contenteditable="true"] {
       border-top-color: #fff;
     }
 
-    [data-theme="dark"] aside nav ul li a:hover {
+    [data-theme="dark"] aside nav ul li button:hover {
       background: var(--secondary-button-bg);
     }
 
@@ -596,13 +601,14 @@ input, textarea, select, [contenteditable="true"] {
     </div>
     <nav>
       <ul>
-        <li><a href="#"><i class="fas fa-user"></i> الملف الشخصي</a></li>
-        <li><a href="story.html" id="clinicalStoryLink" class="locked"><i class="fas fa-user-md"></i> القصة السريرية</a></li>
-        <li><a href="xray.html" id="xrayLink" class="locked"><i class="fas fa-x-ray"></i> تحليل الصور الشعاعية و التقارير الطبية</a></li>
-        <li><a href="#" id="savedLink" class="locked"><i class="fas fa-notes-medical"></i> المحفوظة</a></li>
-        <li><a href="#" id="savedLink" class="locked"><i class="fas fa-clinic-medical"></i> إدارة العيادة</a></li>
-        <li><a href="prescriptions.html" id="prescriptionsLink" class="locked"><i class="fas fa-pills"></i> الوصفات</a></li>
-        <li><a href="#" id="diseasesLink" class="locked"><i class="fas fa-virus"></i> الأمراض</a></li>
+        <!-- تعديل: تحويل a إلى button، وإضافة data-href للتنقل الداخلي -->
+        <li><button id="profileBtn" data-href="#"><i class="fas fa-user"></i> الملف الشخصي</button></li>
+        <li><button id="clinicalStoryBtn" class="locked" data-href="story.html"><i class="fas fa-user-md"></i> القصة السريرية</button></li>
+        <li><button id="xrayBtn" class="locked" data-href="xray.html"><i class="fas fa-x-ray"></i> تحليل الصور الشعاعية و التقارير الطبية</button></li>
+        <li><button id="savedBtn" class="locked" data-href="saved.html"><i class="fas fa-notes-medical"></i> المحفوظة</button></li>
+        <li><button id="clinicBtn" class="locked" data-href="clinic.html"><i class="fas fa-clinic-medical"></i> إدارة العيادة</button></li>
+        <li><button id="prescriptionsBtn" class="locked" data-href="prescriptions.html"><i class="fas fa-pills"></i> الوصفات</button></li>
+        <li><button id="diseasesBtn" class="locked" data-href="diseases.html"><i class="fas fa-virus"></i> الأمراض</button></li>
       </ul>
     </nav>
   </aside>
@@ -730,63 +736,70 @@ input, textarea, select, [contenteditable="true"] {
       return `${seconds} ثانية`;
     }
 
-    // فتح/إغلاق الأقسام (غير)
+    // فتح/إغلاق الأقسام (غير، لكن محدث للـ buttons)
     function toggleSections(unlock = true) {
       isSubscribed = unlock;
-      const lockedLinks = ['clinicalStoryLink', 'xrayLink', 'savedLink', 'prescriptionsLink', 'diseasesLink'];
-      lockedLinks.forEach(id => {
-        const link = document.getElementById(id);
-        if (link) {
+      const lockedBtns = ['clinicalStoryBtn', 'xrayBtn', 'savedBtn', 'clinicBtn', 'prescriptionsBtn', 'diseasesBtn'];
+      lockedBtns.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
           if (unlock) {
-            link.classList.remove('locked');
+            btn.classList.remove('locked');
             console.log(`تم إزالة locked من: ${id} - isSubscribed: ${isSubscribed}`);
           } else {
-            link.classList.add('locked');
+            btn.classList.add('locked');
             console.log(`تم إضافة locked إلى: ${id} - isSubscribed: ${isSubscribed}`);
           }
         }
       });
       // إعادة بناء event listeners بعد التحديث
-      setupLinkListeners();
+      setupButtonListeners(); // تعديل: غير اسم الدالة للـ buttons
       console.log(`تم تحديث الأقسام - الحالة الجديدة: ${unlock ? 'مفتوحة' : 'مقفلة'}`);
     }
 
-    // إعداد event listeners للروابط (غير)
-    function setupLinkListeners() {
-      const navLinks = document.querySelectorAll('aside nav ul li a');
-      navLinks.forEach(link => {
-        const linkHref = link.getAttribute('href');
-        const allowedHrefs = ['portfolio.html']; // الأقسام المسموحة دائمًا
-        link.removeEventListener('click', handleLockedClick); // إزالة listener القديم
-        link.addEventListener('click', handleLockedClick);
-        if (!allowedHrefs.includes(linkHref)) {
-          if (isSubscribed) {
-            // إذا مفعل، لا listener للقفل
-            link.classList.remove('locked');
-          }
+    // تعديل: إعداد event listeners للـ buttons بدلاً من a
+    function setupButtonListeners() {
+      const navBtns = document.querySelectorAll('aside nav ul li button');
+      navBtns.forEach(btn => {
+        const btnHref = btn.getAttribute('data-href'); // تعديل: استخدم data-href
+        const allowedHrefs = ['#']; // الأقسام المسموحة دائمًا (مثل الملف الشخصي)
+        btn.removeEventListener('click', handleLockedClick); // إزالة listener القديم
+        btn.addEventListener('click', handleLockedClick);
+        if (!allowedHrefs.includes(btnHref) && !isSubscribed) {
+          btn.classList.add('locked'); // تأكيد القفل إذا غير مفعل
         }
       });
-      console.log('تم إعادة بناء event listeners للروابط');
+      console.log('تم إعادة بناء event listeners للـ buttons');
     }
 
-    // معالج النقر على رابط مقفل (غير)
+    // تعديل: معالج النقر على button (بدلاً من a)
     function handleLockedClick(e) {
-      // إغلاق sidebar دائمًا عند النقر على رابط
+      // إغلاق sidebar دائمًا عند النقر على button
       sidebar.classList.remove("active");
       overlay.classList.remove("active");
-      console.log('تم إغلاق sidebar بعد نقر على رابط');
+      console.log('تم إغلاق sidebar بعد نقر على button');
 
       if (isSubscribed) {
-        // إذا مفعل، قم بالتوجيه الطبيعي ولا تفعل Modal
-        return; // الرابط يعمل كالمعتاد
+        // إذا مفعل، قم بالتنقل
+        const btn = e.target.closest('button');
+        const btnHref = btn ? btn.getAttribute('data-href') : '';
+        if (btnHref && btnHref !== '#') {
+          window.location.href = btnHref; // تنقل إلى الصفحة
+          console.log(`تنقل إلى: ${btnHref}`);
+        } else if (btnHref === '#') {
+          // للروابط مثل الملف الشخصي، يمكن إضافة وظيفة مخصصة هنا
+          console.log('نقر على قسم غير محدد (مثل الملف الشخصي)');
+          // مثال: فتح modal للملف الشخصي إذا كان موجودًا
+        }
+        return;
       }
 
-      const link = e.target.closest('a');
-      const linkHref = link ? link.getAttribute('href') : '';
-      const allowedHrefs = ['portfolio.html'];
+      const btn = e.target.closest('button');
+      const btnHref = btn ? btn.getAttribute('data-href') : '';
+      const allowedHrefs = ['#']; // فقط هذه غير مقفلة
 
-      if (!allowedHrefs.includes(linkHref) && link.classList.contains('locked')) {
-        e.preventDefault(); // منع التوجيه فقط إذا مقفل
+      if (!allowedHrefs.includes(btnHref) && btn.classList.contains('locked')) {
+        e.preventDefault(); // منع أي تنقل افتراضي
         document.getElementById('subscriptionModal').style.display = 'flex';
         console.log('تم فتح Modal القفل - isSubscribed: false');
       }
@@ -896,7 +909,7 @@ input, textarea, select, [contenteditable="true"] {
     document.addEventListener('DOMContentLoaded', () => {
       initProfile();
       loadFromLocalStorage();
-      setupLinkListeners(); // إعداد listeners الابتدائي
+      setupButtonListeners(); // تعديل: استخدم setupButtonListeners
       initTheme();  // تعديل: إضافة تهيئة الثيم
     });
 
@@ -1008,13 +1021,15 @@ input, textarea, select, [contenteditable="true"] {
       activationStatus.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
       setTimeout(() => { activationStatus.innerHTML = ''; }, 5000);
     }
+
+    // تعديل: إضافة عناصر DOM للـ sidebar هنا (لأنها module)
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
   </script>
 
   <script>
     // عناصر DOM (غير)
     const menuBtn = document.getElementById("menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
     const subscriptionModal = document.getElementById('subscriptionModal');
     const expiredModal = document.getElementById('expiredModal');
     const goToSettingsBtn = document.getElementById('goToSettingsBtn');
@@ -1074,87 +1089,35 @@ input, textarea, select, [contenteditable="true"] {
     // تعديل: إزالة media query التلقائي، والاعتماد على initTheme() في JS (مثل admin)
   </script>
   <script>
-// حل متقدم لـ Telegram MiniApp
+// منع قائمة السياق (الضغطة المطولة) على جميع الروابط (غير، محدث للـ buttons أيضًا)
 document.addEventListener('DOMContentLoaded', function() {
-    // اكتشاف إذا كان في Telegram WebView
-    const isTelegramWebView = window.Telegram && Telegram.WebApp;
+    const buttons = document.querySelectorAll('aside nav ul li button'); // تعديل: أضف buttons
     
-    const links = document.querySelectorAll('a');
-    
-    links.forEach(link => {
-        const originalHref = link.getAttribute('href');
-        
-        if (originalHref && !originalHref.startsWith('#') && !originalHref.startsWith('javascript:')) {
-            // إزالة href مؤقتًا وإضافة data-href بدلاً منه
-            link.setAttribute('data-href', originalHref);
-            link.removeAttribute('href');
-            link.style.cursor = 'pointer';
-            
-            // إضافة event listener للنقر
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const href = this.getAttribute('data-href');
-                
-                if (isTelegramWebView) {
-                    // استخدم Telegram WebApp API إذا متاح
-                    Telegram.WebApp.openLink(href);
-                } else {
-                    // استخدم window.open للبيئات الأخرى
-                    window.open(href, '_blank');
-                }
-                return false;
-            });
-        }
-        
-        // منع قائمة السياق
-        link.addEventListener('contextmenu', function(e) {
+    // تعديل: منع على buttons أيضًا
+    buttons.forEach(btn => {
+        btn.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
         
-        // منع اللمس الطويل
-        link.addEventListener('touchstart', function(e) {
-            this.longPressTimer = setTimeout(() => {
-                e.preventDefault();
-            }, 300);
+        // منع أيضًا حدث touch الطويل (للهواتف)
+        btn.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                this.longPressTimer = setTimeout(() => {
+                    e.preventDefault();
+                }, 500);
+            }
         });
         
-        link.addEventListener('touchend', function(e) {
+        btn.addEventListener('touchend', function(e) {
             clearTimeout(this.longPressTimer);
         });
         
-        link.addEventListener('touchmove', function(e) {
+        btn.addEventListener('touchmove', function(e) {
             clearTimeout(this.longPressTimer);
         });
     });
-});
-
-// حل احتياطي إضافي
-window.addEventListener('load', function() {
-    document.body.addEventListener('click', function(e) {
-        let target = e.target;
-        
-        // ابحث عن أقرب رابط
-        while (target && target !== document.body) {
-            if (target.tagName === 'A') {
-                const href = target.getAttribute('href') || target.getAttribute('data-href');
-                
-                if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    if (window.Telegram && Telegram.WebApp) {
-                        Telegram.WebApp.openLink(href);
-                    } else {
-                        window.open(href, '_blank');
-                    }
-                    return false;
-                }
-                break;
-            }
-            target = target.parentNode;
-        }
-    }, true);
 });
 </script>
 
