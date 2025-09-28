@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>تطبيق طبيبي - الإعدادات</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+  <title>قسم القصة السريرية — طبيبي</title>
+  <script src="https://js.puter.com/v2/"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
 
-    /* CSS Variables للـThemes (مشابه للملفات السابقة) */
+    /* CSS Variables للـThemes (مدمج ومحسن من prescriptions.html وdashboard.html) */
     :root {
-      --bg-color: #f5f7fa;
+      /* Light Mode (افتراضي) */
+      --bg-color: #f5f7fb;
       --card-bg: #ffffff;
-      --text-color: #333;
-      --secondary-text: #666;
+      --text-color: #111827;
+      --secondary-text: #6b7280;
       --border-color: #d1d5db;
       --primary-blue: #1e88e5;
       --button-bg: #1e88e5;
-      --button-hover: #1565c0;
+      --button-hover: #0d9488;
       --secondary-button-bg: #f1f1f1;
       --secondary-button-hover: #ddd;
-      --success-green: #4caf50;
-      --shadow-light: rgba(0,0,0,0.05);
+      --notice-bg: #fff7ed;
+      --notice-border: #f59e0b;
+      --notice-text: #92400e;
+      --danger-bg: #fee2e2;
+      --danger-border: #ef4444;
+      --danger-text: #dc2626;
+      --pre-bg: #0f172a;
+      --pre-text: #f8fafc;
+      --shadow-light: rgba(0,0,0,.08);
+      --table-border: #e5e7eb;
+      --table-even: #f9fafb;
       --icon-color: #1e88e5;
-      --animated-text-color: #60a5fa;
-      --warning-orange: #ff9800;
-      --subscription-expired: #f44336;
+      --spinner-border: rgba(0,0,0,0.08);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #60a5fa; /* لون النص المتحرك */
+      --info-box-bg: #f1f1f1; /* للـ info-boxes في light، مشابه dashboard */
+      --info-box-shadow: rgba(0,0,0,0.05); /* للـ shadow في light */
+      --success-green: #4caf50;
     }
 
     [data-theme="dark"] {
+      /* Dark Mode */
       --bg-color: #121212;
       --card-bg: #1e1e1e;
       --text-color: #e0e0e0;
@@ -36,51 +53,63 @@
       --border-color: #4b5563;
       --primary-blue: #0d47a1;
       --button-bg: #0d47a1;
-      --button-hover: #1565c0;
+      --button-hover: #0f766e;
       --secondary-button-bg: #2a2a2a;
       --secondary-button-hover: #3a3a3a;
-      --success-green: #388e3c;
+      --notice-bg: #7c2d12;
+      --notice-border: #dc2626;
+      --notice-text: #fecaca;
+      --danger-bg: #991b1b;
+      --danger-border: #b91c1c;
+      --danger-text: #fca5a5;
+      --pre-bg: #374151;
+      --pre-text: #f3f4f6;
       --shadow-light: rgba(255,255,255,0.05);
+      --table-border: #374151;
+      --table-even: #1f2937;
       --icon-color: #90caf9;
-      --animated-text-color: #a5b4fc;
-      --warning-orange: #ff8f00;
-      --subscription-expired: #ef5350;
+      --spinner-border: rgba(255,255,255,0.1);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #a5b4fc; /* لون النص المتحرك في الدارك */
+      --info-box-bg: #2a2a2a; /* للـ info-boxes في dark، مشابه dashboard */
+      --info-box-shadow: rgba(255,255,255,0.05); /* للـ shadow في dark */
+      --success-green: #388e3c;
+    }
+
+    /* منع تحديد النص في كامل الموقع */
+    * {
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none;  /* Safari */
+      -khtml-user-select: none;   /* Konqueror HTML */
+      -moz-user-select: none;     /* Firefox */
+      -ms-user-select: none;      /* Internet Explorer/Edge */
+      user-select: none;          /* Non-prefixed version */
+    }
+
+    /* استثناء للحقول حتى يتمكن المستخدم من الكتابة */
+    input, textarea, select, [contenteditable="true"] {
+      -webkit-user-select: text;  /* Safari */
+      -moz-user-select: text;     /* Firefox */
+      -ms-user-select: text;      /* Internet Explorer/Edge */
+      user-select: text;          /* Non-prefixed version */
     }
 
     body {
-      margin: 0;
       font-family: 'Tajawal', sans-serif;
       background: var(--bg-color);
+      margin: 0;
       color: var(--text-color);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.3s, color 0.3s;
-    }
-  /* منع تحديد النص في كامل الموقع */
-* {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none;  /* Safari */
-    -khtml-user-select: none;   /* Konqueror HTML */
-    -moz-user-select: none;     /* Firefox */
-    -ms-user-select: none;      /* Internet Explorer/Edge */
-    user-select: none;          /* Non-prefixed version */
-}
-
-/* استثناء للحقول حتى يتمكن المستخدم من الكتابة */
-input, textarea, select, [contenteditable="true"] {
-    -webkit-user-select: text;  /* Safari */
-    -moz-user-select: text;     /* Firefox */
-    -ms-user-select: text;      /* Internet Explorer/Edge */
-     user-select: text;          /* Non-prefixed version */
-}
-
-    a {
-   
-    text-decoration: none; /* إزالة الخط التحتي */
-
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
+    a { text-decoration: none; }
+
+    /* الهيدر (مدمج من prescriptions.html مع تعديل: زر رجوع) */
     header {
       background: var(--primary-blue);
       color: #fff;
@@ -91,24 +120,6 @@ input, textarea, select, [contenteditable="true"] {
       transition: background-color 0.3s;
       box-shadow: 0 2px 8px var(--shadow-light);
     }
-
-    /* تعديل: إضافة زر الثيم في header (مثل admin.html) */
-    #themeToggle {
-      background: var(--secondary-button-bg);
-      color: var(--text-color);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-left: 10px;
-    }
-
-    #themeToggle:hover { background: var(--secondary-button-hover); }
 
     header .logo {
       display: flex;
@@ -132,279 +143,359 @@ input, textarea, select, [contenteditable="true"] {
       margin-top: 2px;
     }
 
-    /* زر الهامبرغر */
-    #menu-btn {
+    /* زر الرجوع (بدلاً من hamburger) */
+    #back-btn {
       font-size: 26px;
-      background: var(--button-bg);
+      background: var(--secondary-button-bg);
       border: none;
-      color: #fff;
+      color: var(--text-color);
       cursor: pointer;
       border-radius: 8px;
       padding: 6px 10px;
       transition: background 0.3s;
-    }
-
-    #menu-btn:hover { background: var(--button-hover); }
-
-    aside {
-      position: fixed;
-      top: 0;
-      right: -250px;
-      width: 250px;
-      height: 100%;
-      background: var(--card-bg);
-      color: var(--icon-color);
-      transition: right 0.3s, background-color 0.3s, color 0.3s;
-      padding-top: 60px;
-      z-index: 1000;
-      box-shadow: -2px 0 6px var(--shadow-light);
-    }
-
-    aside.active { right: 0; }
-
-    aside .profile {
-      text-align: center;
-      margin-bottom: 20px;
-      padding: 20px;
-      background: linear-gradient(135deg, var(--primary-blue), #42a5f5);
-      border-radius: 0 0 20px 20px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
-      transition: box-shadow 0.3s ease;
-    }
-
-    aside .profile:hover {
-      box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
-    }
-
-    aside .profile .app-icon {
-      font-size: 48px;
-      color: #fff;
-      margin-bottom: 10px;
-      display: block;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    aside .profile h3 {
-      margin: 5px 0;
-      font-size: 18px;
-      color: #fff;
-      font-weight: 700;
-    }
-
-    aside .profile p {
-      margin: 5px 0;
-      font-size: 14px;
-      color: rgba(255,255,255,0.9);
-    }
-
-    /* عرض تاريخ انتهاء الاشتراك في الـ sidebar */
-    #subscriptionStatus {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--success-green);
-      font-weight: bold;
-      padding: 5px;
-      border-radius: 5px;
-      background: rgba(76, 175, 80, 0.1);
-    }
-
-    #subscriptionStatus.expired {
-      color: var(--subscription-expired);
-      background: rgba(244, 67, 54, 0.1);
-    }
-
-    /* عرض العداد في الصفحة الرئيسية (main) */
-    #subscriptionStatusMain {
-      margin: 20px 0;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 16px;
-      background: var(--card-bg);
-      box-shadow: 0 2px 8px var(--shadow-light);
-      border: 2px solid var(--success-green);
-    }
-
-    #subscriptionStatusMain.expired {
-      border-color: var(--subscription-expired);
-      color: var(--subscription-expired);
-    }
-
-    #subscriptionStatus .countdown,
-    #subscriptionStatusMain .countdown {
-      font-weight: normal;
-      color: inherit;
-    }
-
-    aside nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    aside nav ul li {
-      margin: 15px 0;
-    }
-
-    aside nav ul li a {
-      color: var(--icon-color);
-      text-decoration: none;
-      font-size: 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 20px;
-      transition: 0.2s;
-      border-radius: 6px;
-      cursor: pointer; /* لتحسين التفاعل */
+      gap: 5px;
+      font-family: inherit;
+      font-weight: bold;
     }
 
-    aside nav ul li a:hover {
-      background: var(--secondary-button-bg);
-      color: var(--primary-blue);
+    #back-btn:hover { 
+      background: var(--secondary-button-hover);
     }
 
-    /* أيقونة قفل للأقسام المغلقة */
-    aside nav ul li a.locked::before {
-      content: '\f023'; /* fa-lock */
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      color: var(--warning-orange);
-      margin-left: 5px;
-      animation: pulse 2s infinite;
+    /* الفوتر (مدمج من prescriptions.html) */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: var(--primary-blue);
+      color: #fff;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      margin-top: auto; /* لدفع الفوتر للأسفل */
     }
-
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      z-index: 900;
-      cursor: pointer; /* للإشارة إلى أنه قابل للنقر */
-    }
-
-    .overlay.active { display: block; }
 
     main {
       flex: 1;
-      padding: 20px;
+      padding: 20px 0;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px;
     }
 
     .card {
       background: var(--card-bg);
-      padding: 20px;
-      margin: 20px auto;
       border-radius: 12px;
-      box-shadow: 0 2px 8px var(--shadow-light);
-      max-width: 600px;
-      text-align: center;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      padding: 18px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .card input {
-      width: 85%;
-      padding: 12px;
-      border: 1px solid var(--border-color);
+    /* النص المتحرك متعدد المقاطع في الـHeader (محسن من prescriptions.html مع shimmer) */
+    .animated-phrase {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--animated-text-color);
+      margin: 20px auto;
+      padding: 15px 20px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05));
+      backdrop-filter: blur(10px);
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    [data-theme="dark"] .animated-phrase {
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.1), rgba(165, 180, 252, 0.05));
+    }
+
+    .animated-phrase.show {
+      opacity: 1;
+      animation: fadeGlow 3s ease-in-out infinite;
+    }
+
+    .animated-phrase::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s linear infinite;
+      opacity: 0;
+    }
+
+    .animated-phrase.show::before {
+      opacity: 1;
+    }
+
+    @keyframes fadeGlow {
+      0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(96, 165, 250, 0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.02);
+        text-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+      }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    h1 i {
+      font-size: 1.5rem;
+      color: var(--icon-color);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+
+    h2 i {
+      font-size: 1.2rem;
+      color: var(--icon-color);
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text-color);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
       border-radius: 8px;
-      margin: 10px 0;
-      font-family: inherit;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      box-sizing: border-box;
       background: var(--card-bg);
       color: var(--text-color);
-      /* تعديل: دعم أفضل للتنسيق المجزأ (LTR للمفتاح) */
-      direction: ltr;
-      text-align: left;
-      font-family: monospace;
+      transition: border-color 0.3s ease, background 0.3s ease;
     }
 
-    .card input:focus {
-      outline: none;
+    input:focus, select:focus, textarea:focus {
       border-color: var(--primary-blue);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .btn {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
       padding: 12px 18px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-      transition: background-color 0.3s;
-    }
-
-    .btn-primary {
       background: var(--button-bg);
       color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      margin: 10px 0;
+      font-size: 16px;
     }
 
-    .btn-primary:hover {
+    .btn:hover:not(:disabled) {
       background: var(--button-hover);
+      transform: translateY(-2px);
     }
 
-    .btn-warning {
-      background: var(--warning-orange);
-      color: #fff;
+    .btn.secondary {
+      background: var(--secondary-button-bg);
+      color: var(--text-color); /* للتوافق مع dark */
     }
 
-    .btn-warning:hover {
-      background: #f57c00;
+    .btn.secondary:hover {
+      background: var(--secondary-button-hover);
     }
 
-    .btn-success {
+    .btn-green {
       background: var(--success-green);
       color: #fff;
     }
 
-    .btn-success:hover {
-      background: #388e3c;
+    .btn-green:hover {
+      background: #45a049;
+      transform: translateY(-2px);
     }
 
-    /* زر إغلاق في الـ Modal */
-    .btn-close {
-      background: var(--secondary-button-bg);
-      color: var(--text-color);
-      font-size: 14px;
+    .btn:disabled {
+      background: var(--border-color);
+      cursor: not-allowed;
+      transform: none;
     }
 
-    .btn-close:hover {
-      background: var(--secondary-button-hover);
+    .btn i {
+      font-size: 1.1rem;
     }
 
-    .status-message {
+    .muted {
+      color: var(--secondary-text);
+      font-size: 13px;
+    }
+
+    .notice {
+      background: var(--notice-bg);
+      border-left: 4px solid var(--notice-border);
       padding: 10px;
+      border-radius: 6px;
+      color: var(--notice-text);
+      font-size: 13px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notice i {
+      font-size: 1.1rem;
+      color: var(--notice-border);
+    }
+
+    .danger {
+      background: var(--danger-bg);
+      border-left: 4px solid var(--danger-border);
+      color: var(--danger-text);
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .danger i {
+      font-size: 1.1rem;
+      color: var(--danger-border);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      padding: 12px;
       border-radius: 8px;
-      margin: 10px 0;
+      font-size: 13px;
+      overflow: auto;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid var(--spinner-border);
+      border-top-color: var(--primary-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* مربعات التاريخ والعد (مثل prescriptions.html تمامًا) */
+    .info-boxes {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .info-boxes div {
+      flex: 1;
+      background: var(--info-box-bg);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px var(--info-box-shadow);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .info-boxes h4 {
+      margin-bottom: 10px;
+      color: var(--primary-blue);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: color 0.3s;
+    }
+
+    .info-boxes h4 i {
+      font-size: 20px;
+      color: var(--icon-color);
+    }
+
+    .info-boxes p {
+      margin: 0;
+      font-size: 18px;
       font-weight: bold;
+      color: var(--text-color);
     }
 
-    .status-success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .status-error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    /* Modal */
+    /* الـ Modal (محسن من الكود الأصلي) */
     .modal {
       display: none;
       position: fixed;
@@ -428,81 +519,136 @@ input, textarea, select, [contenteditable="true"] {
       animation: fadeIn 0.3s ease;
       transition: background-color 0.3s;
       color: var(--text-color);
-      position: relative;
     }
 
     .modal-content h3 {
       margin-bottom: 20px;
       color: var(--primary-blue);
       transition: color 0.3s;
+      font-size: 18px;
+      font-weight: bold;
     }
 
-    .modal-content p {
+    /* أزرار الـ Modal كروابط احترافية */
+    .modal-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-bottom: 20px;
-      color: var(--secondary-text);
-      line-height: 1.5;
     }
 
-    .modal button {
-      margin: 10px 0;
+    .modal-link {
+      display: block;
+      padding: 14px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px var(--shadow-light);
+      border: 2px solid transparent;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
     }
 
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: var(--secondary-text);
-      cursor: pointer;
+    .modal-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px var(--shadow-light);
+      text-decoration: none;
     }
 
-    .modal-close:hover {
-      color: var(--primary-blue);
+    .modal-link i {
+      margin-left: 8px; /* في RTL، مسافة بعد النص */
+      font-size: 18px;
+    }
+
+    /* ألوان احترافية للروابط */
+    .modal-link.primary {
+      background: linear-gradient(135deg, var(--primary-blue), #42a5f5);
+    }
+
+    .modal-link.primary:hover {
+      background: linear-gradient(135deg, var(--button-hover), var(--primary-blue));
+    }
+
+    .modal-link.cancel {
+      background: linear-gradient(135deg, #757575, #9e9e9e);
+      color: #fff;
+      border: 2px solid #9e9e9e;
+    }
+
+    .modal-link.cancel:hover {
+      background: linear-gradient(135deg, #616161, #757575);
+      border-color: #616161;
     }
 
     @keyframes fadeIn {
-      from {opacity: 0; transform: scale(0.9);}
-      to {opacity: 1; transform: scale(1);}
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: var(--primary-blue);
-      color: #fff;
-      font-size: 14px;
-      transition: background-color 0.3s;
-    }
-
-    /* Loading spinner */
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-      margin: 10px auto;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Responsive */
+    /* Responsive تحسين للموبايل (مثل prescriptions.html) */
     @media (max-width: 768px) {
-      header { padding: 10px 15px; flex-direction: column; gap: 10px; }
+      header { padding: 10px 15px; }
       header h1 { font-size: 20px; }
-      .btn { width: 100%; margin: 5px 0; }
-      .modal-content { width: 95%; padding: 15px; }
-      aside .profile .app-icon { font-size: 40px; }
-      #themeToggle { width: 100%; justify-content: center; margin-left: 0; }
+      #back-btn { font-size: 18px; padding: 8px 12px; }
+      main { padding: 10px 0; }
+      .wrap {
+        margin: 0 auto;
+        padding: 10px;
+      }
+      .cols-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .animated-phrase {
+        font-size: 16px;
+        padding: 10px 15px;
+        min-height: 50px;
+      }
+
+      .info-boxes {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .info-boxes div {
+        padding: 12px;
+      }
+
+      .info-boxes h4 {
+        font-size: 14px;
+      }
+
+      .info-boxes p {
+        font-size: 15px;
+      }
+
+      .btn {
+        width: 100%;
+        margin: 5px 0;
+      }
+
+      .modal-content { 
+        width: 95%; 
+        padding: 15px; 
+      }
+      
+      .modal-link { 
+        padding: 12px 15px; 
+        font-size: 15px; 
+      }
+
+      footer { padding: 10px; font-size: 12px; }
     }
 
-    /* Dark Mode تحسينات (تحسين: أضف دعم أفضل للـ input في dark mode) */
+    /* Dark Mode تحسينات (مدمج ومحسن من prescriptions.html) */
     [data-theme="dark"] input,
     [data-theme="dark"] select,
     [data-theme="dark"] textarea {
@@ -532,577 +678,227 @@ input, textarea, select, [contenteditable="true"] {
       color: var(--text-color) !important;
     }
 
-    [data-theme="dark"] aside .profile {
-      background: linear-gradient(135deg, var(--primary-blue), #90caf9);
-      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
-    }
-
-    [data-theme="dark"] aside .profile:hover {
-      box-shadow: 0 6px 20px rgba(13, 71, 161, 0.4);
-    }
-
-    [data-theme="dark"] aside .profile h3,
-    [data-theme="dark"] aside .profile p {
-      color: #fff;
-    }
-
-    [data-theme="dark"] aside .profile .loading {
-      border-color: rgba(255,255,255,0.3);
-      border-top-color: #fff;
-    }
-
-    [data-theme="dark"] aside nav ul li a:hover {
+    [data-theme="dark"] #back-btn {
       background: var(--secondary-button-bg);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #back-btn:hover {
+      background: var(--secondary-button-hover);
+    }
+
+    [data-theme="dark"] .info-boxes div {
+      background: var(--info-box-bg);
+      box-shadow: 0 2px 6px var(--info-box-shadow);
+    }
+
+    [data-theme="dark"] .info-boxes h4 {
+      color: var(--primary-blue);
+    }
+
+    [data-theme="dark"] .info-boxes h4 i {
+      color: var(--icon-color);
+    }
+
+    [data-theme="dark"] .card {
+      background: var(--card-bg);
     }
 
     [data-theme="dark"] .modal-content {
       background: var(--card-bg);
-      color: var(--text-color);
     }
 
-    [data-theme="dark"] #subscriptionStatusMain {
-      background: var(--card-bg);
-      border-color: #388e3c;
+    [data-theme="dark"] .modal-link.primary {
+      background: linear-gradient(135deg, var(--primary-blue), #90caf9);
     }
 
-    [data-theme="dark"] #subscriptionStatusMain.expired {
-      border-color: #ef5350;
+    [data-theme="dark"] .modal-link.primary:hover {
+      background: linear-gradient(135deg, var(--button-hover), var(--primary-blue));
+    }
+
+    [data-theme="dark"] .modal-link.cancel {
+      background: linear-gradient(135deg, #424242, #616161);
+      border-color: #616161;
+      color: #e0e0e0;
+    }
+
+    [data-theme="dark"] .modal-link.cancel:hover {
+      background: linear-gradient(135deg, #2c2c2c, #424242);
+      border-color: #424242;
+    }
+
+    [data-theme="dark"] .modal-link {
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    [data-theme="dark"] .modal-link:hover {
+      box-shadow: 0 4px 15px var(--shadow-light);
     }
   </style>
 </head>
-<body data-theme="light">
+<body data-theme="light">  <!-- افتراضي light، يتغير تلقائيًا -->
 
+  <!-- الهيدر (مدمج ومعدل من prescriptions.html) -->
   <header>
     <div class="logo">
       <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
       <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
     </div>
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <!-- تعديل: إضافة زر الثيم هنا -->
-      <button id="themeToggle">
-        <i class="fas fa-moon"></i> وضع الليل
-      </button>
-      <button id="menu-btn"><i class="fas fa-bars"></i></button>
-    </div>
+    <button id="back-btn">
+      <i class="fas fa-arrow-left"></i>  
+    </button>
   </header>
 
-  <aside id="sidebar">
-    <div class="profile">
-      <i class="fas fa-user-md app-icon"></i>
-      <div class="loading" id="profileLoading"></div>
-      <h3 id="userName">مستخدم تجريبي</h3>
-      <p id="userSpecialty">غير محدد</p>
-      <div id="subscriptionStatus"></div>
-    </div>
-    <nav>
-      <ul>
-        <li><a href="#"><i class="fas fa-user"></i> الملف الشخصي</a></li>
-        <li><a href="story.html" id="clinicalStoryLink" class="locked"><i class="fas fa-user-md"></i> القصة السريرية</a></li>
-        <li><a href="xray.html" id="xrayLink" class="locked"><i class="fas fa-x-ray"></i> تحليل الصور الشعاعية و التقارير الطبية</a></li>
-        <li><a href="#" id="savedLink" class="locked"><i class="fas fa-notes-medical"></i> المحفوظة</a></li>
-        <li><a href="prescriptions.html" id="prescriptionsLink" class="locked"><i class="fas fa-pills"></i> الوصفات</a></li>
-        <li><a href="#" id="diseasesLink" class="locked"><i class="fas fa-virus"></i> الأمراض</a></li>
-      </ul>
-    </nav>
-  </aside>
-
-  <div class="overlay" id="overlay"></div>
-
   <main>
-    <div class="card">
-      <h2><i class="fas fa-key"></i> تفعيل الاشتراك</h2>
-      <p id="activationIntro">أدخل مفتاح الاشتراك لفتح جميع الأقسام. (لا حاجة لتسجيل دخول)</p>
-      <form id="activationForm">
-        <!-- تعديل: غير maxlength إلى 24، و placeholder للتنسيق الجديد، و direction لـ LTR -->
-        <input type="text" id="subscriptionKey" placeholder="ضع مفتاح الأشتراك مكون من 14 رمز" maxlength="24" required>
-        <button type="submit" class="btn btn-primary" id="activateBtn">
-          <i class="fas fa-unlock"></i> تفعيل الاشتراك
-        </button>
-      </form>
-      <div id="activationStatus"></div>
-    </div>
+    <div class="wrap">
+      <div class="card">
+        <h1><i class="fas fa-clipboard-list"></i> قسم القصة السريرية</h1>
+        <!-- النص المتحرك متعدد المقاطع -->
+        <div class="animated-phrase" id="animatedPhrase"></div>
+      </div>
 
-    <div id="subscriptionStatusMain"></div>
+      <!-- مربعات التاريخ والعد (مثل prescriptions.html تمامًا) -->
+      <div class="card">
+        <div class="info-boxes">
+          <div>
+            <h4><i class="fas fa-clock"></i> تاريخ اليوم</h4>
+            <p id="today-date"></p>
+          </div>
+          <div>
+            <h4><i class="fas fa-file-medical"></i> عدد القصص</h4>
+            <p id="story-count">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- الأزرار (محسن للتوافق) -->
+      <div class="card">
+        <button class="btn btn-green" id="addStoryBtn">
+          <i class="fas fa-plus"></i> إضافة قصة سريرية جديدة
+        </button>
+      </div>
+    </div>
   </main>
 
-  <!-- Modal للأقسام المغلقة -->
-  <div class="modal" id="subscriptionModal">
+  <!-- الـ Modal لأنواع القصص -->
+  <div class="modal" id="storyModal">
     <div class="modal-content">
-      <button class="modal-close" id="modalCloseBtn">&times;</button>
-      <h3><i class="fas fa-lock" style="color: var(--warning-orange);"></i> قسم غير متاح</h3>
-      <p>يحتاج هذا القسم تفعيل اشتراك. أدخل مفتاح صالح في الإعدادات لفتح القسم.</p>
-      <button class="btn btn-warning" id="goToSettingsBtn">
-        <i class="fas fa-cog"></i> الذهاب إلى الإعدادات
-      </button>
-      <button class="btn btn-close" id="closeModalBtn">إغلاق</button>
+      <h3><i class="fas fa-question-circle" style="margin-left: 0.5rem; color: var(--icon-color);"></i> لمن القصة؟</h3>
+      <div class="modal-links">
+        <a href="stories/internal.html" class="modal-link primary">
+          <i class="fas fa-user-md"></i> داخلية عامة / جراحة
+        </a>
+        <a href="stories/neonatal.html" class="modal-link primary">
+          <i class="fas fa-baby"></i> أطفال
+        </a>
+        <a href="stories/gyncology.html" class="modal-link primary">
+          <i class="fas fa-female"></i> نسائية
+        </a>
+        <a href="#" class="modal-link cancel" id="closeModal">
+          <i class="fas fa-times"></i> إلغاء
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- Modal لانتهاء الاشتراك -->
-  <div class="modal" id="expiredModal">
-    <div class="modal-content">
-      <button class="modal-close" id="expiredCloseBtn">&times;</button>
-      <h3><i class="fas fa-clock" style="color: var(--subscription-expired);"></i> انتهى الاشتراك</h3>
-      <p>وقت الاشتراك قد انتهى. أدخل مفتاحًا جديدًا لإعادة التفعيل.</p>
-      <button class="btn btn-primary" id="retryActivationBtn">
-        <i class="fas fa-key"></i> إعادة التفعيل
-      </button>
-      <button class="btn btn-close" id="closeExpiredModal">إغلاق</button>
-    </div>
-  </div>
-
+  <!-- الفوتر (مدمج من prescriptions.html) -->
   <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
 
-  <!-- Firebase SDK (فقط Realtime DB) - نفس الكود السابق، بدون تغيير -->
-  <script type="module">
-    // استيراد Firebase لـ Realtime Database فقط (config للمفاتيح)
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getDatabase, ref, get, update, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-
-    const keysConfig = {
-      apiKey: "AIzaSyAVmar5Wz9bECnRUSu7XwUNKnnqG3b6Wwc",
-      authDomain: "subscription-key-tsbibisy.firebaseapp.com",
-      databaseURL: "https://subscription-key-tsbibisy-default-rtdb.firebaseio.com",
-      projectId: "subscription-key-tsbibisy",
-      storageBucket: "subscription-key-tsbibisy.firebasestorage.app",
-      messagingSenderId: "870064790159",
-      appId: "1:870064790159:web:03da3ce667350dcc3a6efa"
-    };
-
-    const app = initializeApp(keysConfig);
-    const dbRealtime = getDatabase(app);
-
-    // عناصر DOM
-    const userName = document.getElementById('userName');
-    const userSpecialty = document.getElementById('userSpecialty');
-    const profileLoading = document.getElementById('profileLoading');
-    const subscriptionStatus = document.getElementById('subscriptionStatus');
-    const subscriptionStatusMain = document.getElementById('subscriptionStatusMain');
-    const activationIntro = document.getElementById('activationIntro');
-    const activationForm = document.getElementById('activationForm');
-    const subscriptionKeyInput = document.getElementById('subscriptionKey');
-    const activateBtn = document.getElementById('activateBtn');
-    const activationStatus = document.getElementById('activationStatus');
-
-    let subscriptionTimer = null;
-    let currentSubData = null;
-    let isSubscribed = false; // متغير global للحالة
-
-    // توليد deviceId ثابت (غير: يمكن استخدام localStorage للحفظ عبر الجلسات، لكن نتركه كما هو للبساطة)
-    function generateDeviceId() {
-      let storedDeviceId = localStorage.getItem('deviceId');
-      if (storedDeviceId) return storedDeviceId;  // تعديل: حفظ deviceId في localStorage للاستمرارية
-
-      const userAgent = navigator.userAgent;
-      let hash = 0;
-      for (let i = 0; i < userAgent.length; i++) {
-        const char = userAgent.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-      }
-      const deviceId = `device-${Math.abs(hash)}`;
-      localStorage.setItem('deviceId', deviceId);  // حفظ للاستخدام المستقبلي
-      return deviceId;
-    }
-
-    // حساب المدة بناءً على النوع (متطابق مع admin)
-    function getDuration(type) {
-      const durations = {
-        'minute': 1 * 60 * 1000,
-        'month': 30 * 24 * 60 * 60 * 1000,
-        '2months': 60 * 24 * 60 * 60 * 1000,
-        'year': 365 * 24 * 60 * 60 * 1000,
-        '2years': 730 * 24 * 60 * 60 * 1000
-      };
-      return durations[type] || 0;
-    }
-
-    // تنسيق الوقت المتبقي (غير)
-    function formatTimeRemaining(ms) {
-      const days = Math.floor(ms / (24 * 60 * 60 * 1000));
-      const hours = Math.floor((ms % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-      const minutes = Math.floor((ms % (60 * 60 * 1000)) / (60 * 1000));
-      const seconds = Math.floor((ms % (60 * 1000)) / 1000);
-      if (days > 0) return `${days} يوم ${hours} ساعة`;
-      if (hours > 0) return `${hours} ساعة ${minutes} دقيقة`;
-      if (minutes > 0) return `${minutes} دقيقة ${seconds} ثانية`;
-      return `${seconds} ثانية`;
-    }
-
-    // فتح/إغلاق الأقسام (غير)
-    function toggleSections(unlock = true) {
-      isSubscribed = unlock;
-      const lockedLinks = ['clinicalStoryLink', 'xrayLink', 'savedLink', 'prescriptionsLink', 'diseasesLink'];
-      lockedLinks.forEach(id => {
-        const link = document.getElementById(id);
-        if (link) {
-          if (unlock) {
-            link.classList.remove('locked');
-            console.log(`تم إزالة locked من: ${id} - isSubscribed: ${isSubscribed}`);
-          } else {
-            link.classList.add('locked');
-            console.log(`تم إضافة locked إلى: ${id} - isSubscribed: ${isSubscribed}`);
-          }
-        }
-      });
-      // إعادة بناء event listeners بعد التحديث
-      setupLinkListeners();
-      console.log(`تم تحديث الأقسام - الحالة الجديدة: ${unlock ? 'مفتوحة' : 'مقفلة'}`);
-    }
-
-    // إعداد event listeners للروابط (غير)
-    function setupLinkListeners() {
-      const navLinks = document.querySelectorAll('aside nav ul li a');
-      navLinks.forEach(link => {
-        const linkHref = link.getAttribute('href');
-        const allowedHrefs = ['portfolio.html']; // الأقسام المسموحة دائمًا
-        link.removeEventListener('click', handleLockedClick); // إزالة listener القديم
-        link.addEventListener('click', handleLockedClick);
-        if (!allowedHrefs.includes(linkHref)) {
-          if (isSubscribed) {
-            // إذا مفعل، لا listener للقفل
-            link.classList.remove('locked');
-          }
-        }
-      });
-      console.log('تم إعادة بناء event listeners للروابط');
-    }
-
-    // معالج النقر على رابط مقفل (غير)
-    function handleLockedClick(e) {
-      // إغلاق sidebar دائمًا عند النقر على رابط
-      sidebar.classList.remove("active");
-      overlay.classList.remove("active");
-      console.log('تم إغلاق sidebar بعد نقر على رابط');
-
-      if (isSubscribed) {
-        // إذا مفعل، قم بالتوجيه الطبيعي ولا تفعل Modal
-        return; // الرابط يعمل كالمعتاد
-      }
-
-      const link = e.target.closest('a');
-      const linkHref = link ? link.getAttribute('href') : '';
-      const allowedHrefs = ['portfolio.html'];
-
-      if (!allowedHrefs.includes(linkHref) && link.classList.contains('locked')) {
-        e.preventDefault(); // منع التوجيه فقط إذا مقفل
-        document.getElementById('subscriptionModal').style.display = 'flex';
-        console.log('تم فتح Modal القفل - isSubscribed: false');
-      }
-    }
-
-    // تحديث حالة الاشتراك في الـ sidebar (غير)
-    function updateSubscriptionStatus(data) {
-      currentSubData = data;
-      if (!data || data.expirationTime <= Date.now()) {
-        subscriptionStatus.innerHTML = '<i class="fas fa-clock"></i> الاشتراك منتهي';
-        subscriptionStatus.classList.add('expired');
-        toggleSections(false); // إغلاق الأقسام
-        localStorage.removeItem('subscriptionData');
-        sessionStorage.removeItem('subscriptionData');
-        activationIntro.textContent = 'الاشتراك منتهي. أدخل مفتاحًا جديدًا لإعادة فتح الأقسام.';
-        console.log('الاشتراك منتهي - تم إعادة القفل الكامل');
-        return false;
-      }
-      const remaining = data.expirationTime - Date.now();
-      subscriptionStatus.innerHTML = `<i class="fas fa-check-circle"></i> يتبقى: ${formatTimeRemaining(remaining)}`;
-      subscriptionStatus.classList.remove('expired');
-      toggleSections(true); // فتح الأقسام
-      activationIntro.textContent = 'الاشتراك مفعل. يمكنك الآن الوصول إلى جميع الأقسام.';
-      console.log('الاشتراك صالح - تم فتح الأقسام الكامل');
-      return true;
-    }
-
-    // تحديث العداد في الصفحة الرئيسية (main) (غير)
-    function updateSubscriptionStatusMain(data) {
-      if (!data || data.expirationTime <= Date.now()) {
-        subscriptionStatusMain.innerHTML = '<i class="fas fa-clock"></i> الاشتراك منتهي - قم بتفعيل مفتاح جديد.';
-        subscriptionStatusMain.classList.add('expired');
-        return;
-      }
-      const remaining = data.expirationTime - Date.now();
-      subscriptionStatusMain.innerHTML = `<i class="fas fa-check-circle"></i> وقت الاشتراك المتبقي: ${formatTimeRemaining(remaining)}`;
-      subscriptionStatusMain.classList.remove('expired');
-    }
-
-    // بدء عداد الاشتراك (غير)
-    function startSubscriptionTimer(data) {
-      if (subscriptionTimer) clearInterval(subscriptionTimer);
-      currentSubData = data;
-      updateSubscriptionStatus(data);
-      updateSubscriptionStatusMain(data);
-      subscriptionTimer = setInterval(() => {
-        const updatedData = { ...data };
-        if (!updateSubscriptionStatus(updatedData)) {
-          updateSubscriptionStatusMain(updatedData);
-          clearInterval(subscriptionTimer);
-          document.getElementById('expiredModal').style.display = 'flex';
-        } else {
-          updateSubscriptionStatusMain(updatedData);
-        }
-      }, 1000);
-    }
-
-    // تحميل من localStorage أو sessionStorage (تعديل: إضافة تحقق deviceId)
-    function loadFromLocalStorage() {
-      let stored = localStorage.getItem('subscriptionData');
-      if (!stored) {
-        stored = sessionStorage.getItem('subscriptionData');
-      }
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          const currentDeviceId = generateDeviceId();  // تعديل: جلب deviceId الحالي
-          console.log('بيانات محملة من التخزين: ', parsed);
-          if (parsed.expirationTime > Date.now() && parsed.deviceId === currentDeviceId) {  // تعديل: تحقق deviceId للأمان
-            console.log('تم تحميل الاشتراك بنجاح - فتح الأقسام');
-            startSubscriptionTimer(parsed);
-            if (sessionStorage.getItem('subscriptionData')) {
-              localStorage.setItem('subscriptionData', stored);
-            }
-            return true;
-          } else if (parsed.deviceId !== currentDeviceId) {
-            console.log('deviceId مختلف - إعادة القفل (جهاز جديد)');
-            localStorage.removeItem('subscriptionData');
-            sessionStorage.removeItem('subscriptionData');
-          } else {
-            console.log('انتهى الوقت - إعادة القفل');
-            localStorage.removeItem('subscriptionData');
-            sessionStorage.removeItem('subscriptionData');
-          }
-        } catch (e) {
-          console.log('خطأ في تحليل التخزين: ', e);
-        }
-        localStorage.removeItem('subscriptionData');
-        sessionStorage.removeItem('subscriptionData');
-      } else {
-        console.log('لا يوجد اشتراك محفوظ - الأقسام مقفلة');
-      }
-      toggleSections(false);
-      subscriptionStatus.innerHTML = '<i class="fas fa-key"></i> قم بتفعيل الاشتراك';
-      subscriptionStatusMain.innerHTML = '<i class="fas fa-key"></i> أدخل مفتاح اشتراك للبدء.';
-      return false;
-    }
-
-    // تهيئة البروفايل (غير)
-    function initProfile() {
-      userName.textContent = 'مستخدم تجريبي';
-      userSpecialty.textContent = 'غير محدد';
-      profileLoading.style.display = 'none';
-    }
-
-    // تهيئة الصفحة (غير، لكن أضف initTheme)
+  <script>
+    // معالج زر الرجوع (جديد: يعود إلى الصفحة السابقة أو dashboard.html)
     document.addEventListener('DOMContentLoaded', () => {
-      initProfile();
-      loadFromLocalStorage();
-      setupLinkListeners(); // إعداد listeners الابتدائي
-      initTheme();  // تعديل: إضافة تهيئة الثيم
-    });
-
-    // تعديل: دالة تهيئة الثيم (مثل admin.html، بـ localStorage)
-    function initTheme() {
-      function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        const toggleBtn = document.getElementById('themeToggle');
-        const icon = toggleBtn.querySelector('i');
-        const text = theme === 'dark' ? 'وضع النهار' : 'وضع الليل';
-        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        toggleBtn.innerHTML = `${icon.outerHTML} ${text}`;
-      }
-
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      applyTheme(savedTheme);
-
-      const themeToggle = document.getElementById('themeToggle');
-      themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
-      });
-    }
-
-    // معالج تفعيل الاشتراك (تعديل كبير: دعم multi-device وتنسيق المفتاح الجديد)
-    activationForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const key = subscriptionKeyInput.value.trim().toUpperCase();
-      // تعديل: غير regex وطول للتنسيق الجديد (24 حرفًا مع "-")
-      if (key.length !== 24 || !/^[A-Z0-9-]{24}$/.test(key)) {
-        showStatus('المفتاح يجب أن يكون 24 حرفًا مجزأً بـ - (مثل TABIBI-ABCD-EFGH-IJKL-MN).', 'error');
-        return;
-      }
-
-      const deviceId = generateDeviceId();
-      console.log(`تفعيل جديد - deviceId: ${deviceId}`);
-
-      activateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
-      activateBtn.disabled = true;
-
-      try {
-        const keyRef = ref(dbRealtime, `keys/${key}`);
-        const snapshot = await get(keyRef);
-        if (!snapshot.exists()) {
-          throw new Error('المفتاح غير موجود أو غير صالح. تأكد من توليده من لوحة الإدارة.');
-        }
-
-        const keyData = snapshot.val();
-        console.log('بيانات المفتاح: ', keyData);
-
-        // تعديل: دعم multi-device - تحقق من الحد الأقصى والتكرار
-        if (keyData.currentDevices >= (keyData.maxDevices || 1)) {
-          throw new Error('تم الوصول إلى الحد الأقصى للأجهزة المسموحة لهذا المفتاح.');
-        }
-        if (keyData.deviceIds && keyData.deviceIds.includes(deviceId)) {
-          throw new Error('هذا الجهاز مفعل بالفعل على هذا المفتاح.');
-        }
-
-        const activationTime = Date.now();
-        const duration = getDuration(keyData.subscriptionType);
-        const expirationTime = activationTime + duration;
-
-        // تعديل: لا تحذف المفتاح - حدث فقط (دعم multi-device)
-        const updates = {
-          deviceIds: keyData.deviceIds ? [...keyData.deviceIds, deviceId] : [deviceId],
-          currentDevices: (keyData.currentDevices || 0) + 1
-        };
-        if (!keyData.activated) {  // إذا أول تفعيل، أضف activationTime و expirationTime
-          updates.activated = true;
-          updates.activationTime = activationTime;
-          updates.expirationTime = expirationTime;
-        }
-
-        await update(keyRef, updates);
-        console.log('تم تحديث المفتاح في Firebase (دعم multi-device)');
-
-        // تعديل: لا remove(keyRef) - احتفظ به للأجهزة الأخرى
-
-        const subData = {
-          key: key,
-          subscriptionType: keyData.subscriptionType,
-          activationTime,
-          expirationTime,
-          deviceId,
-          maxDevices: keyData.maxDevices || 1  // حفظ للتحقق المحلي إذا لزم
-        };
-        localStorage.setItem('subscriptionData', JSON.stringify(subData));
-        sessionStorage.setItem('subscriptionData', JSON.stringify(subData));
-        console.log('تم حفظ الاشتراك - بدء العداد وفتح الأقسام');
-
-        startSubscriptionTimer(subData); // هذا يستدعي toggleSections(true)
-
-        showStatus(`تم تفعيل الاشتراك بنجاح! نوع: ${keyData.subscriptionType}. يتبقى: ${formatTimeRemaining(duration)}. (جهاز ${keyData.currentDevices + 1} من ${keyData.maxDevices || 1})`, 'success');
-        subscriptionKeyInput.value = '';
-
-      } catch (error) {
-        console.error('خطأ في التفعيل: ', error);
-        showStatus('خطأ: ' + error.message, 'error');
-      } finally {
-        activateBtn.innerHTML = '<i class="fas fa-unlock"></i> تفعيل الاشتراك';
-        activateBtn.disabled = false;
+      const backBtn = document.getElementById('back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          if (window.history.length > 1) {
+            window.history.back(); // إذا كان هناك تاريخ، ارجع للخلف
+          } else {
+            window.location.href = 'dashboard.html'; // إلا، اذهب إلى dashboard
+          }
+        });
       }
     });
 
-    // دالة عرض الرسائل (غير)
-    function showStatus(message, type) {
-      activationStatus.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
-      setTimeout(() => { activationStatus.innerHTML = ''; }, 5000);
+    // النص المتحرك متعدد المقاطع (محسن من prescriptions.html)
+    const phrases = [
+      "<i class='fas fa-stethoscope'></i> مرحباً بك في قسم القصة السريرية في تطبيق طبيبي",
+      "<i class='fas fa-user-md'></i> هنا يمكنك أخذ القصة السريرية بكل احترافية",
+      "<i class='fas fa-brain'></i> وتحليلها باستخدام أحدث تقنيات الذكاء الصنعي"
+    ];
+    let phraseIndex = 0;
+    const animatedPhrase = document.getElementById("animatedPhrase");
+
+    function showPhrase() {
+      animatedPhrase.classList.remove("show");
+      setTimeout(() => {
+        animatedPhrase.innerHTML = phrases[phraseIndex];
+        animatedPhrase.classList.add("show");
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }, 500);  // fade out delay
     }
-  </script>
+    setInterval(showPhrase, 4000);  // تغيير كل 4 ثواني
+    showPhrase();  // عرض الأول فورًا
 
-  <script>
-    // عناصر DOM (غير)
-    const menuBtn = document.getElementById("menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
-    const subscriptionModal = document.getElementById('subscriptionModal');
-    const expiredModal = document.getElementById('expiredModal');
-    const goToSettingsBtn = document.getElementById('goToSettingsBtn');
-    const retryActivationBtn = document.getElementById('retryActivationBtn');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const expiredCloseBtn = document.getElementById('expiredCloseBtn');
-    const closeExpiredModal = document.getElementById('closeExpiredModal');
+    // عرض تاريخ اليوم (مثل prescriptions.html تمامًا، تاريخ فقط بدون وقت)
+    const todayDate = document.getElementById("today-date");
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    todayDate.textContent = new Date().toLocaleDateString('ar-EG', options);
 
-    // دالة إغلاق الـ sidebar (مشتركة) (غير)
-    function closeSidebar() {
-      sidebar.classList.remove("active");
-      overlay.classList.remove("active");
-      console.log('تم إغلاق sidebar و overlay');
-    }
+    // عدّ القصص السريرية (مثل rx-count في prescriptions)
+    let storyCount = 0;
+    const storyCountElement = document.getElementById("story-count");
+    const addStoryBtn = document.getElementById("addStoryBtn");
+    const modal = document.getElementById("storyModal");
+    const closeModal = document.getElementById("closeModal");
 
-    // فتح الـ sidebar (غير)
-    menuBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("active");
-      overlay.classList.toggle("active");
-      console.log('تم فتح/إغلاق sidebar');
+    // فتح الـ Modal عند الضغط على زر الإضافة
+    addStoryBtn.addEventListener("click", () => {
+      // زيادة العدد (يمكن إزالة هذا إذا لم تريد زيادة حتى اختيار نوع)
+      storyCount++;
+      storyCountElement.textContent = storyCount;
+      modal.style.display = "flex"; // فتح الـ Modal
+      console.log('تم فتح قائمة أنواع القصص السريرية');
     });
 
-    // إغلاق عند النقر على overlay (click و touch أيضًا) (غير)
-    overlay.addEventListener("click", closeSidebar);
-    overlay.addEventListener("touchstart", closeSidebar); // للموبايل
-
-    // إغلاق Modals و sidebar (غير)
-    function closeSubscriptionModal() {
-      subscriptionModal.style.display = 'none';
-      closeSidebar(); // إغلاق sidebar إذا مفتوح
-    }
-
-    function closeExpiredModalFn() {
-      expiredModal.style.display = 'none';
-      closeSidebar(); // إغلاق sidebar إذا مفتوح
-    }
-
-    goToSettingsBtn.addEventListener('click', closeSubscriptionModal);
-    retryActivationBtn.addEventListener('click', () => {
-      closeExpiredModalFn();
-      activationForm.scrollIntoView({ behavior: 'smooth' });
-      subscriptionKeyInput.focus();
-      subscriptionKeyInput.value = '';
+    // إغلاق الـ Modal
+    closeModal.addEventListener("click", (e) => {
+      e.preventDefault(); // منع التوجيه الافتراضي
+      modal.style.display = "none";
     });
 
-    modalCloseBtn.addEventListener('click', closeSubscriptionModal);
-    closeModalBtn.addEventListener('click', closeSubscriptionModal);
-    expiredCloseBtn.addEventListener('click', closeExpiredModalFn);
-    closeExpiredModal.addEventListener('click', closeExpiredModalFn);
-
-    window.addEventListener('click', function(e) {
-      if (e.target === subscriptionModal) closeSubscriptionModal();
-      if (e.target === expiredModal) closeExpiredModalFn();
+    // إغلاق الـ Modal عند الضغط خارجه
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
     });
 
-    // تعديل: إزالة media query التلقائي، والاعتماد على initTheme() في JS (مثل admin)
+    // كود الـDark Mode التلقائي (مثل prescriptions.html)
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // كشف تلقائي عند التحميل
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+
+    // استجابة لتغيير تفضيلات النظام (تلقائي)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches ? 'dark' : 'light');
+    });
   </script>
   <script>
-// منع قائمة السياق (الضغطة المطولة) على جميع الروابط (غير)
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('a');
-    
-    links.forEach(link => {
+    // منع الـ Context Menu على الروابط الداخلية (من الكود الأصلي)
+    document.addEventListener('DOMContentLoaded', function() {
+      const internalLinks = document.querySelectorAll('a[href*="localhost"], a[href*=".html"]');
+      
+      internalLinks.forEach(link => {
         link.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
+          e.preventDefault();
+          return false;
         });
-        
-        // منع أيضًا حدث touch الطويل (للهواتف)
-        link.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 0) {
-                const touch = e.touches[0];
-                this.longPressTimer = setTimeout(() => {
-                    e.preventDefault();
-                }, 500);
-            }
-        });
-        
-        link.addEventListener('touchend', function(e) {
-            clearTimeout(this.longPressTimer);
-        });
-        
-        link.addEventListener('touchmove', function(e) {
-            clearTimeout(this.longPressTimer);
-        });
+      });
     });
-});
-</script>
-
+  </script>
 </body>
 </html>
