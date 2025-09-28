@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title> طبيبي — واجهة التحليل الطبي</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    /* CSS Variables للـThemes (دمج مع السابق في xray.html) */
+    :root {
+      /* Light Mode (افتراضي) */
+      --bg-color: #f4f7fb;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --secondary-text: #444;
+      --border-color: #bbb;
+      --primary-blue: #1e88e5;
+      --button-bg: #2b5f87;
+      --button-hover: #3f88c5;
+      --upload-bg: #f9fcff;
+      --upload-border: #b3cce6;
+      --upload-hover-bg: #eef6ff;
+      --upload-hover-border: #3f88c5;
+      --shadow-light: rgba(0,0,0,.06);
+      --shadow-medium: rgba(0,0,0,.05);
+      --shadow-heavy: rgba(0,0,0,.05);
+      --icon-color: #1e88e5; /* لون الأيقونات */
+      --conf-high: #16a34a; /* أضفت للتشخيصات كما في السابق */
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #60a5fa; /* للنصوص المتحركة كما في xray */
+      --secondary-button-bg: #f1f1f1;
+      --secondary-button-hover: #ddd;
+    }
+
+    [data-theme="dark"] {
+      /* Dark Mode */
+      --bg-color: #1a1a1a;
+      --card-bg: #2c2c2c;
+      --text-color: #f5f5f5;
+      --secondary-text: #b8b8b8;
+      --border-color: #555;
+      --primary-blue: #64b5f6;
+      --button-bg: #37474f;
+      --button-hover: #546e7a;
+      --upload-bg: #2d3748;
+      --upload-border: #4a5568;
+      --upload-hover-bg: #4a5568;
+      --upload-hover-border: #63b3ed;
+      --shadow-light: rgba(0,0,0,.3);
+      --shadow-medium: rgba(0,0,0,.4);
+      --shadow-heavy: rgba(0,0,0,.2);
+      --icon-color: #64b5f6; /* لون الأيقونات في الدارك */
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #a5b4fc; /* للنصوص المتحركة في الدارك */
+      --secondary-button-bg: #2a2a2a;
+      --secondary-button-hover: #3a3a3a;
+    }
+  /* منع تحديد النص في كامل الموقع */
+* {
+    -webkit-user-select: none;  /* Safari */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge */
+    user-select: none;          /* Non-prefixed version */
+}
+
+/* استثناء لحقول الإدخال والنصوص حتى يتمكن المستخدم من الكتابة */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* Internet Explorer/Edge */
+    user-select: text;          /* Non-prefixed version */
+}
+
+    body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg-color);
+  margin: 0;
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+  h1 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    h1 i {
+      font-size: 1.5rem;
+      color: var(--icon-color);
+    }
+  .wrap {
+      max-width: 980px;
+      padding: 16px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    a { text-decoration: none; }
+
+    /* الهيدر (مدمج من dashboard.html مع تعديل: إزالة hamburger وإضافة back button) */
+    header {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    header .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    header small {
+      font-size: 13px;
+      color: #e3f2fd;
+      margin-top: 2px;
+    }
+
+    /* زر الرجوع (بدلاً من hamburger) */
+    #back-btn {
+      font-size: 26px;
+      background: var(--secondary-button-bg);
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+      font-weight: bold;
+    }
+
+    #back-btn:hover { 
+      background: var(--secondary-button-hover);
+    }
+
+    /* الفوتر (مدمج من dashboard.html) */
+    footer {
+  text-align: center;
+  padding: 15px;
+  background: var(--primary-blue);
+  color: #fff;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  margin-top: auto;
+  width: 100%; /* إضافة */
+  box-sizing: border-box; /* إضافة */
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 15px;
+  flex: 1;
+  width: 100%; /* إضافة */
+  box-sizing: border-box; /* إضافة */
+}
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+  
+    /* النص المتحرك (محسن مع تأثير shimmer كما في xray السابق) */
+    .animated-card {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--animated-text-color);
+      min-height: 40px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05));
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    [data-theme="dark"] .animated-card {
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.1), rgba(165, 180, 252, 0.05));
+    }
+
+    .animated-card.show {
+      opacity: 1;
+      animation: fadeGlow 3s ease-in-out infinite;
+    }
+
+    .animated-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s linear infinite;
+      opacity: 0;
+    }
+
+    .animated-card.show::before {
+      opacity: 1;
+    }
+
+    @keyframes fadeGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); text-shadow: 0 0 5px rgba(96, 165, 250, 0.3); }
+      50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    .fade {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .fade.show {
+      opacity: 1;
+    }
+
+    /* الصندوقين (كما في xray السابق، مع card wrapper) */
+    .info-cards {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .small-card {
+      flex: 1;
+      text-align: center;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-medium);
+      padding: 12px;
+      font-size: 14px;
+      color: var(--secondary-text);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .small-card h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .small-card i {
+      font-size: 1.2rem;
+      color: var(--icon-color);
+    }
+
+    /* رفع الملفات (محسن مع drag & drop) */
+    .upload-area {
+      border: 2px dashed var(--upload-border);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--upload-bg);
+      color: var(--secondary-text);
+      transition: background 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .upload-area i {
+      font-size: 3rem;
+      color: var(--icon-color);
+      transition: color 0.3s ease;
+    }
+
+    .upload-area:hover, .upload-area.dragover {
+      background: var(--upload-hover-bg);
+      border-color: var(--upload-hover-border);
+    }
+
+    .upload-area:hover i, .upload-area.dragover i {
+      color: var(--upload-hover-border);
+      transform: scale(1.1);
+    }
+
+    input[type=file] {
+      display: none;
+    }
+
+    .file-name {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .preview-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .preview-container img {
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 10px;
+    }
+
+    /* الحقول (كما في xray السابق) */
+    input, select, textarea {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      background: var(--button-bg);
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    button:hover:not(:disabled), button:not(:disabled):hover {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    button i {
+      font-size: 1.1rem;
+    }
+
+    /* التقرير (مع دعم للثقة كما في xray) */
+    #response {
+      margin-top: 15px;
+      display: none;
+    }
+
+    #response.show {
+      display: block;
+    }
+
+    .result-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px var(--shadow-medium);
+      transition: background 0.3s ease;
+    }
+
+    .result-card h3 {
+      margin-top: 0;
+      color: var(--primary-blue);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .result-card h3 i {
+      font-size: 1.3rem;
+      color: var(--icon-color);
+    }
+
+    .result-card p strong i {
+      font-size: 1rem;
+      margin-left: 0.3rem;
+      color: var(--icon-color);
+    }
+
+    .conf-high { color: var(--conf-high); font-weight: bold; }
+    .conf-moderate { color: var(--conf-moderate); font-weight: bold; }
+    .conf-low { color: var(--conf-low); font-weight: bold; }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      text-align: center;
+    }
+
+    .copy-btn {
+      background: #2980b9;
+    }
+
+    .copy-btn:hover {
+      background: #3498db;
+    }
+
+    .print-btn {
+      background: #27ae60;
+    }
+
+    .print-btn:hover {
+      background: #2ecc71;
+    }
+
+    /* Responsive للـRTL (مع تعديل للهيدر والفوتر) */
+    @media (max-width: 768px) {
+      header { padding: 10px 15px; }
+      header h1 { font-size: 20px; }
+      #back-btn { font-size: 18px; padding: 8px 12px; }
+      .info-cards {
+        flex-direction: column;
+      }
+
+      .container {
+        padding: 10px 10px;
+      }
+
+      button {
+        gap: 0.3rem;
+      }
+
+      .upload-area i {
+        font-size: 2.5rem;
+      }
+
+      footer { padding: 10px; font-size: 12px; }
+    }
+
+    /* Dark Mode تحسينات إضافية للهيدر والفوتر (مدمج من dashboard) */
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    [data-theme="dark"] input::placeholder,
+    [data-theme="dark"] textarea::placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input::-webkit-input-placeholder,
+    [data-theme="dark"] textarea::-webkit-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input:-ms-input-placeholder,
+    [data-theme="dark"] textarea:-ms-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input[readonly],
+    [data-theme="dark"] input[readonly="readonly"] {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] #back-btn {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #back-btn:hover {
+      background: var(--secondary-button-hover);
+    }
+  </style>
+</head>
+<body data-theme="light">  <!-- افتراضي light، يتغير تلقائيًا -->
+
+  <!-- الهيدر (مدمج ومعدل من dashboard.html) -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
+      <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
+    </div>
+    <button id="back-btn">
+      <i class="fas fa-arrow-left"></i>   
+    </button>
+  </header>
+
+  <div class="container">
+    <div class="wrap">
+      <div class="card">
+        <h1><i class="fas fa-x-ray"></i> تحليل الصور الشعاعية و التقارير الطبية</h1>
+        <!-- النص المتحرك متعدد المقاطع -->
+        <div class="card animated-card fade" id="animatedCard"></div>
+     
+      </div>
+    <!-- نص متحرك (محسن مع shimmer effect كما في xray) -->
+    
+
+    <!-- الصندوقين (مثل xray، مع تحديث الوقت والعداد) -->
+    <div class="card">
+      <div class="info-cards">
+        <div class="small-card">
+          <h4><i class="fas fa-clock"></i> تاريخ اليوم</h4>
+          <div id="dateTime"></div>
+        </div>
+        <div class="small-card">
+          <h4><i class="fas fa-file-medical"></i> عدد التقارير</h4>
+          <div id="reportCount">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- رفع الملفات (مع دعم drag & drop) -->
+    <div class="card">
+      <div class="upload-area" id="uploadArea">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>انقر لتحميل الملف أو اسحبه هنا</p>
+        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.dcm"/>
+      </div>
+      <div class="file-name" id="fileName"></div>
+      <div class="preview-container" id="previewContainer"><img id="imagePreview" style="display:none;"/></div>
+    </div>
+
+    <!-- تفاصيل الفحص (كما في xray) -->
+    <div class="card">
+      <h3><i class="fas fa-stethoscope"></i> تفاصيل الفحص</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <select id="examTypeSelect">
+          <option value="">اختر نوع الفحص</option>
+          <option value="X-ray">X-ray</option>
+          <option value="MRI">MRI</option>
+          <option value="CT">CT</option>
+          <option value="ECG">ECG</option>
+          <option value="Laboratory">Laboratory Test</option>
+        </select>
+        <input type="number" id="ageInput" placeholder="العمر" min="0">
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <select id="genderSelect">
+          <option value="">الجنس</option>
+          <option value="Male">ذكر</option>
+          <option value="Female">أنثى</option>
+        </select>
+        <input type="text" id="reasonInput" placeholder="سبب الفحص">
+      </div>
+
+      <textarea id="historyInput" placeholder="أعراض أو تاريخ مرضي إضافي" style="margin-top:12px;"></textarea>
+
+      <div style="margin-top:12px;text-align:center;">
+        <button id="analyzeBtn" disabled><i class="fas fa-play-circle"></i> بدء التحليل</button>
+      </div>
+    </div>
+
+    <!-- التقرير -->
+    <div id="response">
+      <div class="result-card" id="card-meta"></div>
+      <div class="result-card" id="card-findings"></div>
+      <div class="result-card" id="card-differential"></div>
+      <div class="action-buttons">
+        <button class="action-btn copy-btn" id="copyBtn"><i class="fas fa-copy"></i> نسخ</button>
+        <button class="action-btn print-btn" onclick="window.print()"><i class="fas fa-print"></i> طباعة</button>
+      </div>
+    </div>
+   </div>
+  </div>
+
+  <!-- الفوتر (مدمج من dashboard.html) -->
+  <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
+
+  <script>
+    // كود الـDark Mode التلقائي (كما في xray)
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches ? 'dark' : 'light');
+    });
+
+    // معالج زر الرجوع (جديد: يعود إلى الصفحة السابقة أو dashboard.html)
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.getElementById('back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          if (window.history.length > 1) {
+            window.history.back(); // إذا كان هناك تاريخ، ارجع للخلف
+          } else {
+            window.location.href = 'dashboard.html'; // إلا، اذهب إلى dashboard
+          }
+        });
+      }
+    });
+
+    // النصوص المتحركة (محسنة مع الأيقونات والتأثير)
+    const messages = [
+      "<i class='fas fa-hospital' style='margin-left:0.5rem; color:var(--animated-text-color);'></i> مرحبا بك في قسم تحليل الصور الشعاعية و التقارير الطبية",
+      "<i class='fas fa-brain' style='margin-left:0.5rem; color:var(--animated-text-color);'></i> ارفع تقريرك أو صورتك ودع الذكاء الاصطناعي يقوم بتحليلها"
+    ];
+    let msgIndex = 0;
+    const animatedCard = document.getElementById("animatedCard");
+
+    function showMessage() {
+      animatedCard.classList.remove("show");
+      setTimeout(() => {
+        animatedCard.innerHTML = messages[msgIndex];
+        animatedCard.classList.add("show");
+        msgIndex = (msgIndex + 1) % messages.length;
+      }, 500);
+    }
+    setInterval(showMessage, 4000);
+    showMessage();
+
+    // الوقت والتاريخ (تحديث كل ثانية)
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById("dateTime").textContent = now.toLocaleString('ar-EG');
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // عداد تقارير (يزيد عند نجاح التحليل)
+    let reportCount = 0;
+    function incrementReportCount() {
+      reportCount++;
+      document.getElementById("reportCount").textContent = reportCount;
+    }
+
+    // رفع وضغط الصور (مع drag & drop وإصلاح innerHTML)
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileName = document.getElementById('fileName');
+    const imagePreview = document.getElementById('imagePreview');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const previewContainer = document.getElementById('previewContainer');
+    let uploadedFile = null;
+
+    // دعم drag & drop
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) processFile(file);
+    });
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => processFile(e.target.files[0]));
+
+    function processFile(file) {
+      if (!file) return;
+      uploadedFile = file;
+
+      // عرض اسم الملف مع أيقونة (استخدم innerHTML)
+      const icon = file.type.includes('image') ? 'fas fa-file-image' : 'fas fa-file-pdf';
+      fileName.innerHTML = `<i class="${icon}" style="color:var(--icon-color); margin-left:0.5rem;"></i> ${file.name}`;
+
+      if (file.type.includes("image")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((blob) => {
+              uploadedFile = new File([blob], file.name, { type: "image/jpeg" });
+              imagePreview.src = URL.createObjectURL(blob);
+              previewContainer.style.display = 'block';
+            }, "image/jpeg", 0.85);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewContainer.style.display = 'none';
+      }
+      analyzeBtn.disabled = false;
+    }
+
+    // التحليل عبر puter.ai (مع streaming وإصلاحات)
+    analyzeBtn.addEventListener('click', async () => {
+      if (!uploadedFile) {
+        alert('⚠️ <i class="fas fa-exclamation-triangle"></i> حمّل ملف أولاً');
+        return;
+      }
+
+      const reason = document.getElementById('reasonInput').value.trim();
+      const examType = document.getElementById('examTypeSelect').value;
+      const age = document.getElementById('ageInput').value.trim();
+      const gender = document.getElementById('genderSelect').value;
+      const history = document.getElementById('historyInput').value.trim();
+
+      if (!examType || !reason || !age || !gender) {
+        alert('⚠️ <i class="fas fa-exclamation-triangle"></i> يرجى تعبئة الحقول المطلوبة');
+        return;
+      }
+
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحليل...';
+      const responseEl = document.getElementById('response');
+      responseEl.classList.add('show');
+
+      // عرض المعلومات الأساسية
+      document.getElementById('card-meta').innerHTML = `
+        <h3><i class="fas fa-info-circle"></i> معلومات أساسية</h3>
+        <p><strong><i class="fas fa-x-ray"></i> نوع الفحص:</strong> ${examType}</p>
+        <p><strong><i class="fas fa-question-circle"></i> السبب:</strong> ${reason}</p>
+        <p><strong><i class="fas fa-birthday-cake"></i> العمر:</strong> ${age}</p>
+        <p><strong><i class="fas fa-venus-mars"></i> الجنس:</strong> ${gender}</p>
+        <p><strong><i class="fas fa-history"></i> تاريخ إضافي:</strong> ${history || 'لا يوجد'}</p>
+      `;
+
+      document.getElementById('card-findings').innerHTML = "<h3><i class='fas fa-eye'></i> المشاهدات</h3><p><i class='fas fa-spinner fa-spin'></i> جاري التحليل...</p>";
+      document.getElementById('card-differential').innerHTML = "<h3><i class='fas fa-stethoscope'></i> التشخيصات التفريقية</h3><p><i class='fas fa-spinner fa-spin'></i> جاري التحليل...</p>";
+
+      try {
+        const fileExtension = uploadedFile.name.split('.').pop();
+        const puterFile = await puter.fs.write(`medical_${Date.now()}.${fileExtension}`, uploadedFile);
+        const uploadedPath = puterFile.path;
+
+        const prompt = `أنت خبير أشعة أو تخطيط قلب أو تحليل مخبري.
+- نوع الفحص: ${examType}
+- السبب: ${reason}
+- العمر: ${age}
+- الجنس: ${gender}
+- التاريخ/الأعراض: ${history || 'لا يوجد'}
+
+اعطني النتيجة بشكل منظم:
+
+مشاهدات:
+- ...
+
+تشخيصات تفريقية:
+- ... (مع مستوى الثقة: High/Moderate/Low)
+
+ملاحظات:`;
+
+        const completion = await puter.ai.chat([
+          { role: "user", content: [{ type: "file", puter_path: uploadedPath }, { type: "text", text: prompt }] }
+        ], { model: "gpt-5", stream: true });
+
+        let text = "";
+        for await (const part of completion) {
+          if (part?.text) {
+            text += part.text;
+            document.getElementById('card-findings').innerHTML = "<h3><i class='fas fa-eye'></i> المشاهدات</h3>" + extractSection(text, "مشاهدات");
+            document.getElementById('card-differential').innerHTML = "<h3><i class='fas fa-stethoscope'></i> التشخيصات التفريقية</h3>" + extractSection(text, "تشخيصات تفريقية");
+          }
+        }
+        await puter.fs.delete(uploadedPath);
+        incrementReportCount();
+      } catch (err) {
+        document.getElementById('card-findings').innerHTML = `<h3><i class='fas fa-exclamation-triangle'></i> خطأ</h3><p><strong><i class='fas fa-times'></i> ${err.message}</strong></p>`;
+        document.getElementById('card-differential').innerHTML = '';
+      }
+      analyzeBtn.innerHTML = '<i class="fas fa-play-circle"></i> بدء التحليل';
+      analyzeBtn.disabled = false;
+    });
+
+    function extractSection(text, section) {
+      const regex = new RegExp(`${section}:[\\s\\S]*?(?=(مشاهدات:|تشخيصات تفريقية:|ملاحظات:|$))`, "i");
+      const match = text.match(regex);
+      if (match) {
+        return formatAsList(match[0].replace(`${section}:`, "").trim());
+      }
+      return `<p><i class='fas fa-exclamation-triangle' style='color:var(--primary-blue);'></i> لم يتم العثور على ${section}</p>`;
+    }
+
+    function formatAsList(text) {
+      const lines = text.split(/\n|-/).map(l => l.trim()).filter(l => l);
+      return "<ul style='text-align:right;'>" + lines.map(l => {
+        // دعم للثقة (High/Moderate/Low)
+        let confClass = '';
+        if (l.includes('High')) confClass = 'conf-high';
+        else if (l.includes('Moderate')) confClass = 'conf-moderate';
+        else if (l.includes('Low')) confClass = 'conf-low';
+        return `<li class="${confClass}"><i class='fas fa-check-circle' style='color:var(--icon-color); margin-left:0.5rem;'></i>${l}</li>`;
+      }).join("") + "</ul>";
+    }
+
+    // نسخ التقرير (إصلاح للـ HTML، استخدم textContent للنص النقي)
+    document.getElementById('copyBtn').onclick = () => {
+      const meta = document.getElementById("card-meta").textContent;
+      const findings = document.getElementById("card-findings").textContent;
+      const diff = document.getElementById("card-differential").textContent;
+      const reportText = `${meta}\n\n${findings}\n\n${diff}`;
+      navigator.clipboard.writeText(reportText).then(() => {
+        alert("<i class='fas fa-check'></i> تم النسخ بنجاح");
+      }).catch(() => {
+        alert("حدث خطأ في النسخ");
+      });
+    };
+  </script>
+</body>
+</html>

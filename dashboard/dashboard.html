@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>تطبيق طبيبي - الإعدادات</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    /* CSS Variables للـThemes (مشابه للملفات السابقة) */
+    :root {
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --secondary-text: #666;
+      --border-color: #d1d5db;
+      --primary-blue: #1e88e5;
+      --button-bg: #1e88e5;
+      --button-hover: #1565c0;
+      --secondary-button-bg: #f1f1f1;
+      --secondary-button-hover: #ddd;
+      --success-green: #4caf50;
+      --shadow-light: rgba(0,0,0,0.05);
+      --icon-color: #1e88e5;
+      --animated-text-color: #60a5fa;
+      --warning-orange: #ff9800;
+      --subscription-expired: #f44336;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --secondary-text: #b0b0b0;
+      --border-color: #4b5563;
+      --primary-blue: #0d47a1;
+      --button-bg: #0d47a1;
+      --button-hover: #1565c0;
+      --secondary-button-bg: #2a2a2a;
+      --secondary-button-hover: #3a3a3a;
+      --success-green: #388e3c;
+      --shadow-light: rgba(255,255,255,0.05);
+      --icon-color: #90caf9;
+      --animated-text-color: #a5b4fc;
+      --warning-orange: #ff8f00;
+      --subscription-expired: #ef5350;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
+    }
+  /* منع تحديد النص في كامل الموقع */
+* {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;  /* Safari */
+    -khtml-user-select: none;   /* Konqueror HTML */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge */
+    user-select: none;          /* Non-prefixed version */
+}
+
+/* استثناء للحقول حتى يتمكن المستخدم من الكتابة */
+input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* Internet Explorer/Edge */
+     user-select: text;          /* Non-prefixed version */
+}
+
+    a {
+   
+    text-decoration: none; /* إزالة الخط التحتي */
+
+    }
+
+    header {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    /* تعديل: إضافة زر الثيم في header (مثل admin.html) */
+    #themeToggle {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 10px;
+    }
+
+    #themeToggle:hover { background: var(--secondary-button-hover); }
+
+    header .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    header small {
+      font-size: 13px;
+      color: #e3f2fd;
+      margin-top: 2px;
+    }
+
+    /* زر الهامبرغر */
+    #menu-btn {
+      font-size: 26px;
+      background: var(--button-bg);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: background 0.3s;
+    }
+
+    #menu-btn:hover { background: var(--button-hover); }
+
+    aside {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background: var(--card-bg);
+      color: var(--icon-color);
+      transition: right 0.3s, background-color 0.3s, color 0.3s;
+      padding-top: 60px;
+      z-index: 1000;
+      box-shadow: -2px 0 6px var(--shadow-light);
+    }
+
+    aside.active { right: 0; }
+
+    aside .profile {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-blue), #42a5f5);
+      border-radius: 0 0 20px 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+      transition: box-shadow 0.3s ease;
+    }
+
+    aside .profile:hover {
+      box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
+    }
+
+    aside .profile .app-icon {
+      font-size: 48px;
+      color: #fff;
+      margin-bottom: 10px;
+      display: block;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    aside .profile h3 {
+      margin: 5px 0;
+      font-size: 18px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    aside .profile p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* عرض تاريخ انتهاء الاشتراك في الـ sidebar */
+    #subscriptionStatus {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--success-green);
+      font-weight: bold;
+      padding: 5px;
+      border-radius: 5px;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    #subscriptionStatus.expired {
+      color: var(--subscription-expired);
+      background: rgba(244, 67, 54, 0.1);
+    }
+
+    /* عرض العداد في الصفحة الرئيسية (main) */
+    #subscriptionStatusMain {
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px var(--shadow-light);
+      border: 2px solid var(--success-green);
+    }
+
+    #subscriptionStatusMain.expired {
+      border-color: var(--subscription-expired);
+      color: var(--subscription-expired);
+    }
+
+    #subscriptionStatus .countdown,
+    #subscriptionStatusMain .countdown {
+      font-weight: normal;
+      color: inherit;
+    }
+
+    aside nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    aside nav ul li {
+      margin: 15px 0;
+    }
+
+    aside nav ul li a {
+      color: var(--icon-color);
+      text-decoration: none;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      transition: 0.2s;
+      border-radius: 6px;
+      cursor: pointer; /* لتحسين التفاعل */
+    }
+
+    aside nav ul li a:hover {
+      background: var(--secondary-button-bg);
+      color: var(--primary-blue);
+    }
+
+    /* أيقونة قفل للأقسام المغلقة */
+    aside nav ul li a.locked::before {
+      content: '\f023'; /* fa-lock */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: var(--warning-orange);
+      margin-left: 5px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 900;
+      cursor: pointer; /* للإشارة إلى أنه قابل للنقر */
+    }
+
+    .overlay.active { display: block; }
+
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px var(--shadow-light);
+      max-width: 600px;
+      text-align: center;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .card input {
+      width: 85%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 10px 0;
+      font-family: inherit;
+      background: var(--card-bg);
+      color: var(--text-color);
+      /* تعديل: دعم أفضل للتنسيق المجزأ (LTR للمفتاح) */
+      direction: ltr;
+      text-align: left;
+      font-family: monospace;
+    }
+
+    .card input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--button-bg);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--button-hover);
+    }
+
+    .btn-warning {
+      background: var(--warning-orange);
+      color: #fff;
+    }
+
+    .btn-warning:hover {
+      background: #f57c00;
+    }
+
+    .btn-success {
+      background: var(--success-green);
+      color: #fff;
+    }
+
+    .btn-success:hover {
+      background: #388e3c;
+    }
+
+    /* زر إغلاق في الـ Modal */
+    .btn-close {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+      font-size: 14px;
+    }
+
+    .btn-close:hover {
+      background: var(--secondary-button-hover);
+    }
+
+    .status-message {
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+      transition: background-color 0.3s;
+      color: var(--text-color);
+      position: relative;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 20px;
+      color: var(--primary-blue);
+      transition: color 0.3s;
+    }
+
+    .modal-content p {
+      margin-bottom: 20px;
+      color: var(--secondary-text);
+      line-height: 1.5;
+    }
+
+    .modal button {
+      margin: 10px 0;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--secondary-text);
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: var(--primary-blue);
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.9);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: var(--primary-blue);
+      color: #fff;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    /* Loading spinner */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header { padding: 10px 15px; flex-direction: column; gap: 10px; }
+      header h1 { font-size: 20px; }
+      .btn { width: 100%; margin: 5px 0; }
+      .modal-content { width: 95%; padding: 15px; }
+      aside .profile .app-icon { font-size: 40px; }
+      #themeToggle { width: 100%; justify-content: center; margin-left: 0; }
+    }
+
+    /* Dark Mode تحسينات (تحسين: أضف دعم أفضل للـ input في dark mode) */
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    [data-theme="dark"] input::placeholder,
+    [data-theme="dark"] textarea::placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input::-webkit-input-placeholder,
+    [data-theme="dark"] textarea::-webkit-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input:-ms-input-placeholder,
+    [data-theme="dark"] textarea:-ms-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input[readonly],
+    [data-theme="dark"] input[readonly="readonly"] {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] aside .profile {
+      background: linear-gradient(135deg, var(--primary-blue), #90caf9);
+      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+    }
+
+    [data-theme="dark"] aside .profile:hover {
+      box-shadow: 0 6px 20px rgba(13, 71, 161, 0.4);
+    }
+
+    [data-theme="dark"] aside .profile h3,
+    [data-theme="dark"] aside .profile p {
+      color: #fff;
+    }
+
+    [data-theme="dark"] aside .profile .loading {
+      border-color: rgba(255,255,255,0.3);
+      border-top-color: #fff;
+    }
+
+    [data-theme="dark"] aside nav ul li a:hover {
+      background: var(--secondary-button-bg);
+    }
+
+    [data-theme="dark"] .modal-content {
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #subscriptionStatusMain {
+      background: var(--card-bg);
+      border-color: #388e3c;
+    }
+
+    [data-theme="dark"] #subscriptionStatusMain.expired {
+      border-color: #ef5350;
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
+      <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <!-- تعديل: إضافة زر الثيم هنا -->
+      <button id="themeToggle">
+        <i class="fas fa-moon"></i> وضع الليل
+      </button>
+      <button id="menu-btn"><i class="fas fa-bars"></i></button>
+    </div>
+  </header>
+
+  <aside id="sidebar">
+    <div class="profile">
+      <i class="fas fa-user-md app-icon"></i>
+      <div class="loading" id="profileLoading"></div>
+      <h3 id="userName">مستخدم تجريبي</h3>
+      <p id="userSpecialty">غير محدد</p>
+      <div id="subscriptionStatus"></div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#"><i class="fas fa-user"></i> الملف الشخصي</a></li>
+        <li><a href="story.html" id="clinicalStoryLink" class="locked"><i class="fas fa-user-md"></i> القصة السريرية</a></li>
+        <li><a href="xray.html" id="xrayLink" class="locked"><i class="fas fa-x-ray"></i> تحليل الصور الشعاعية و التقارير الطبية</a></li>
+        <li><a href="#" id="savedLink" class="locked"><i class="fas fa-notes-medical"></i> المحفوظة</a></li>
+        <li><a href="prescriptions.html" id="prescriptionsLink" class="locked"><i class="fas fa-pills"></i> الوصفات</a></li>
+        <li><a href="#" id="diseasesLink" class="locked"><i class="fas fa-virus"></i> الأمراض</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <main>
+    <div class="card">
+      <h2><i class="fas fa-key"></i> تفعيل الاشتراك</h2>
+      <p id="activationIntro">أدخل مفتاح الاشتراك لفتح جميع الأقسام. (لا حاجة لتسجيل دخول)</p>
+      <form id="activationForm">
+        <!-- تعديل: غير maxlength إلى 24، و placeholder للتنسيق الجديد، و direction لـ LTR -->
+        <input type="text" id="subscriptionKey" placeholder="ضع مفتاح الأشتراك مكون من 14 رمز" maxlength="24" required>
+        <button type="submit" class="btn btn-primary" id="activateBtn">
+          <i class="fas fa-unlock"></i> تفعيل الاشتراك
+        </button>
+      </form>
+      <div id="activationStatus"></div>
+    </div>
+
+    <div id="subscriptionStatusMain"></div>
+  </main>
+
+  <!-- Modal للأقسام المغلقة -->
+  <div class="modal" id="subscriptionModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalCloseBtn">&times;</button>
+      <h3><i class="fas fa-lock" style="color: var(--warning-orange);"></i> قسم غير متاح</h3>
+      <p>يحتاج هذا القسم تفعيل اشتراك. أدخل مفتاح صالح في الإعدادات لفتح القسم.</p>
+      <button class="btn btn-warning" id="goToSettingsBtn">
+        <i class="fas fa-cog"></i> الذهاب إلى الإعدادات
+      </button>
+      <button class="btn btn-close" id="closeModalBtn">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- Modal لانتهاء الاشتراك -->
+  <div class="modal" id="expiredModal">
+    <div class="modal-content">
+      <button class="modal-close" id="expiredCloseBtn">&times;</button>
+      <h3><i class="fas fa-clock" style="color: var(--subscription-expired);"></i> انتهى الاشتراك</h3>
+      <p>وقت الاشتراك قد انتهى. أدخل مفتاحًا جديدًا لإعادة التفعيل.</p>
+      <button class="btn btn-primary" id="retryActivationBtn">
+        <i class="fas fa-key"></i> إعادة التفعيل
+      </button>
+      <button class="btn btn-close" id="closeExpiredModal">إغلاق</button>
+    </div>
+  </div>
+
+  <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
+
+  <!-- Firebase SDK (فقط Realtime DB) - نفس الكود السابق، بدون تغيير -->
+  <script type="module">
+    // استيراد Firebase لـ Realtime Database فقط (config للمفاتيح)
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, get, update, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    const keysConfig = {
+      apiKey: "AIzaSyAVmar5Wz9bECnRUSu7XwUNKnnqG3b6Wwc",
+      authDomain: "subscription-key-tsbibisy.firebaseapp.com",
+      databaseURL: "https://subscription-key-tsbibisy-default-rtdb.firebaseio.com",
+      projectId: "subscription-key-tsbibisy",
+      storageBucket: "subscription-key-tsbibisy.firebasestorage.app",
+      messagingSenderId: "870064790159",
+      appId: "1:870064790159:web:03da3ce667350dcc3a6efa"
+    };
+
+    const app = initializeApp(keysConfig);
+    const dbRealtime = getDatabase(app);
+
+    // عناصر DOM
+    const userName = document.getElementById('userName');
+    const userSpecialty = document.getElementById('userSpecialty');
+    const profileLoading = document.getElementById('profileLoading');
+    const subscriptionStatus = document.getElementById('subscriptionStatus');
+    const subscriptionStatusMain = document.getElementById('subscriptionStatusMain');
+    const activationIntro = document.getElementById('activationIntro');
+    const activationForm = document.getElementById('activationForm');
+    const subscriptionKeyInput = document.getElementById('subscriptionKey');
+    const activateBtn = document.getElementById('activateBtn');
+    const activationStatus = document.getElementById('activationStatus');
+
+    let subscriptionTimer = null;
+    let currentSubData = null;
+    let isSubscribed = false; // متغير global للحالة
+
+    // توليد deviceId ثابت (غير: يمكن استخدام localStorage للحفظ عبر الجلسات، لكن نتركه كما هو للبساطة)
+    function generateDeviceId() {
+      let storedDeviceId = localStorage.getItem('deviceId');
+      if (storedDeviceId) return storedDeviceId;  // تعديل: حفظ deviceId في localStorage للاستمرارية
+
+      const userAgent = navigator.userAgent;
+      let hash = 0;
+      for (let i = 0; i < userAgent.length; i++) {
+        const char = userAgent.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      const deviceId = `device-${Math.abs(hash)}`;
+      localStorage.setItem('deviceId', deviceId);  // حفظ للاستخدام المستقبلي
+      return deviceId;
+    }
+
+    // حساب المدة بناءً على النوع (متطابق مع admin)
+    function getDuration(type) {
+      const durations = {
+        'minute': 1 * 60 * 1000,
+        'month': 30 * 24 * 60 * 60 * 1000,
+        '2months': 60 * 24 * 60 * 60 * 1000,
+        'year': 365 * 24 * 60 * 60 * 1000,
+        '2years': 730 * 24 * 60 * 60 * 1000
+      };
+      return durations[type] || 0;
+    }
+
+    // تنسيق الوقت المتبقي (غير)
+    function formatTimeRemaining(ms) {
+      const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+      const hours = Math.floor((ms % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+      const minutes = Math.floor((ms % (60 * 60 * 1000)) / (60 * 1000));
+      const seconds = Math.floor((ms % (60 * 1000)) / 1000);
+      if (days > 0) return `${days} يوم ${hours} ساعة`;
+      if (hours > 0) return `${hours} ساعة ${minutes} دقيقة`;
+      if (minutes > 0) return `${minutes} دقيقة ${seconds} ثانية`;
+      return `${seconds} ثانية`;
+    }
+
+    // فتح/إغلاق الأقسام (غير)
+    function toggleSections(unlock = true) {
+      isSubscribed = unlock;
+      const lockedLinks = ['clinicalStoryLink', 'xrayLink', 'savedLink', 'prescriptionsLink', 'diseasesLink'];
+      lockedLinks.forEach(id => {
+        const link = document.getElementById(id);
+        if (link) {
+          if (unlock) {
+            link.classList.remove('locked');
+            console.log(`تم إزالة locked من: ${id} - isSubscribed: ${isSubscribed}`);
+          } else {
+            link.classList.add('locked');
+            console.log(`تم إضافة locked إلى: ${id} - isSubscribed: ${isSubscribed}`);
+          }
+        }
+      });
+      // إعادة بناء event listeners بعد التحديث
+      setupLinkListeners();
+      console.log(`تم تحديث الأقسام - الحالة الجديدة: ${unlock ? 'مفتوحة' : 'مقفلة'}`);
+    }
+
+    // إعداد event listeners للروابط (غير)
+    function setupLinkListeners() {
+      const navLinks = document.querySelectorAll('aside nav ul li a');
+      navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+        const allowedHrefs = ['portfolio.html']; // الأقسام المسموحة دائمًا
+        link.removeEventListener('click', handleLockedClick); // إزالة listener القديم
+        link.addEventListener('click', handleLockedClick);
+        if (!allowedHrefs.includes(linkHref)) {
+          if (isSubscribed) {
+            // إذا مفعل، لا listener للقفل
+            link.classList.remove('locked');
+          }
+        }
+      });
+      console.log('تم إعادة بناء event listeners للروابط');
+    }
+
+    // معالج النقر على رابط مقفل (غير)
+    function handleLockedClick(e) {
+      // إغلاق sidebar دائمًا عند النقر على رابط
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+      console.log('تم إغلاق sidebar بعد نقر على رابط');
+
+      if (isSubscribed) {
+        // إذا مفعل، قم بالتوجيه الطبيعي ولا تفعل Modal
+        return; // الرابط يعمل كالمعتاد
+      }
+
+      const link = e.target.closest('a');
+      const linkHref = link ? link.getAttribute('href') : '';
+      const allowedHrefs = ['portfolio.html'];
+
+      if (!allowedHrefs.includes(linkHref) && link.classList.contains('locked')) {
+        e.preventDefault(); // منع التوجيه فقط إذا مقفل
+        document.getElementById('subscriptionModal').style.display = 'flex';
+        console.log('تم فتح Modal القفل - isSubscribed: false');
+      }
+    }
+
+    // تحديث حالة الاشتراك في الـ sidebar (غير)
+    function updateSubscriptionStatus(data) {
+      currentSubData = data;
+      if (!data || data.expirationTime <= Date.now()) {
+        subscriptionStatus.innerHTML = '<i class="fas fa-clock"></i> الاشتراك منتهي';
+        subscriptionStatus.classList.add('expired');
+        toggleSections(false); // إغلاق الأقسام
+        localStorage.removeItem('subscriptionData');
+        sessionStorage.removeItem('subscriptionData');
+        activationIntro.textContent = 'الاشتراك منتهي. أدخل مفتاحًا جديدًا لإعادة فتح الأقسام.';
+        console.log('الاشتراك منتهي - تم إعادة القفل الكامل');
+        return false;
+      }
+      const remaining = data.expirationTime - Date.now();
+      subscriptionStatus.innerHTML = `<i class="fas fa-check-circle"></i> يتبقى: ${formatTimeRemaining(remaining)}`;
+      subscriptionStatus.classList.remove('expired');
+      toggleSections(true); // فتح الأقسام
+      activationIntro.textContent = 'الاشتراك مفعل. يمكنك الآن الوصول إلى جميع الأقسام.';
+      console.log('الاشتراك صالح - تم فتح الأقسام الكامل');
+      return true;
+    }
+
+    // تحديث العداد في الصفحة الرئيسية (main) (غير)
+    function updateSubscriptionStatusMain(data) {
+      if (!data || data.expirationTime <= Date.now()) {
+        subscriptionStatusMain.innerHTML = '<i class="fas fa-clock"></i> الاشتراك منتهي - قم بتفعيل مفتاح جديد.';
+        subscriptionStatusMain.classList.add('expired');
+        return;
+      }
+      const remaining = data.expirationTime - Date.now();
+      subscriptionStatusMain.innerHTML = `<i class="fas fa-check-circle"></i> وقت الاشتراك المتبقي: ${formatTimeRemaining(remaining)}`;
+      subscriptionStatusMain.classList.remove('expired');
+    }
+
+    // بدء عداد الاشتراك (غير)
+    function startSubscriptionTimer(data) {
+      if (subscriptionTimer) clearInterval(subscriptionTimer);
+      currentSubData = data;
+      updateSubscriptionStatus(data);
+      updateSubscriptionStatusMain(data);
+      subscriptionTimer = setInterval(() => {
+        const updatedData = { ...data };
+        if (!updateSubscriptionStatus(updatedData)) {
+          updateSubscriptionStatusMain(updatedData);
+          clearInterval(subscriptionTimer);
+          document.getElementById('expiredModal').style.display = 'flex';
+        } else {
+          updateSubscriptionStatusMain(updatedData);
+        }
+      }, 1000);
+    }
+
+    // تحميل من localStorage أو sessionStorage (تعديل: إضافة تحقق deviceId)
+    function loadFromLocalStorage() {
+      let stored = localStorage.getItem('subscriptionData');
+      if (!stored) {
+        stored = sessionStorage.getItem('subscriptionData');
+      }
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          const currentDeviceId = generateDeviceId();  // تعديل: جلب deviceId الحالي
+          console.log('بيانات محملة من التخزين: ', parsed);
+          if (parsed.expirationTime > Date.now() && parsed.deviceId === currentDeviceId) {  // تعديل: تحقق deviceId للأمان
+            console.log('تم تحميل الاشتراك بنجاح - فتح الأقسام');
+            startSubscriptionTimer(parsed);
+            if (sessionStorage.getItem('subscriptionData')) {
+              localStorage.setItem('subscriptionData', stored);
+            }
+            return true;
+          } else if (parsed.deviceId !== currentDeviceId) {
+            console.log('deviceId مختلف - إعادة القفل (جهاز جديد)');
+            localStorage.removeItem('subscriptionData');
+            sessionStorage.removeItem('subscriptionData');
+          } else {
+            console.log('انتهى الوقت - إعادة القفل');
+            localStorage.removeItem('subscriptionData');
+            sessionStorage.removeItem('subscriptionData');
+          }
+        } catch (e) {
+          console.log('خطأ في تحليل التخزين: ', e);
+        }
+        localStorage.removeItem('subscriptionData');
+        sessionStorage.removeItem('subscriptionData');
+      } else {
+        console.log('لا يوجد اشتراك محفوظ - الأقسام مقفلة');
+      }
+      toggleSections(false);
+      subscriptionStatus.innerHTML = '<i class="fas fa-key"></i> قم بتفعيل الاشتراك';
+      subscriptionStatusMain.innerHTML = '<i class="fas fa-key"></i> أدخل مفتاح اشتراك للبدء.';
+      return false;
+    }
+
+    // تهيئة البروفايل (غير)
+    function initProfile() {
+      userName.textContent = 'مستخدم تجريبي';
+      userSpecialty.textContent = 'غير محدد';
+      profileLoading.style.display = 'none';
+    }
+
+    // تهيئة الصفحة (غير، لكن أضف initTheme)
+    document.addEventListener('DOMContentLoaded', () => {
+      initProfile();
+      loadFromLocalStorage();
+      setupLinkListeners(); // إعداد listeners الابتدائي
+      initTheme();  // تعديل: إضافة تهيئة الثيم
+    });
+
+    // تعديل: دالة تهيئة الثيم (مثل admin.html، بـ localStorage)
+    function initTheme() {
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        const toggleBtn = document.getElementById('themeToggle');
+        const icon = toggleBtn.querySelector('i');
+        const text = theme === 'dark' ? 'وضع النهار' : 'وضع الليل';
+        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        toggleBtn.innerHTML = `${icon.outerHTML} ${text}`;
+      }
+
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      applyTheme(savedTheme);
+
+      const themeToggle = document.getElementById('themeToggle');
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+      });
+    }
+
+    // معالج تفعيل الاشتراك (تعديل كبير: دعم multi-device وتنسيق المفتاح الجديد)
+    activationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const key = subscriptionKeyInput.value.trim().toUpperCase();
+      // تعديل: غير regex وطول للتنسيق الجديد (24 حرفًا مع "-")
+      if (key.length !== 24 || !/^[A-Z0-9-]{24}$/.test(key)) {
+        showStatus('المفتاح يجب أن يكون 24 حرفًا مجزأً بـ - (مثل TABIBI-ABCD-EFGH-IJKL-MN).', 'error');
+        return;
+      }
+
+      const deviceId = generateDeviceId();
+      console.log(`تفعيل جديد - deviceId: ${deviceId}`);
+
+      activateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+      activateBtn.disabled = true;
+
+      try {
+        const keyRef = ref(dbRealtime, `keys/${key}`);
+        const snapshot = await get(keyRef);
+        if (!snapshot.exists()) {
+          throw new Error('المفتاح غير موجود أو غير صالح. تأكد من توليده من لوحة الإدارة.');
+        }
+
+        const keyData = snapshot.val();
+        console.log('بيانات المفتاح: ', keyData);
+
+        // تعديل: دعم multi-device - تحقق من الحد الأقصى والتكرار
+        if (keyData.currentDevices >= (keyData.maxDevices || 1)) {
+          throw new Error('تم الوصول إلى الحد الأقصى للأجهزة المسموحة لهذا المفتاح.');
+        }
+        if (keyData.deviceIds && keyData.deviceIds.includes(deviceId)) {
+          throw new Error('هذا الجهاز مفعل بالفعل على هذا المفتاح.');
+        }
+
+        const activationTime = Date.now();
+        const duration = getDuration(keyData.subscriptionType);
+        const expirationTime = activationTime + duration;
+
+        // تعديل: لا تحذف المفتاح - حدث فقط (دعم multi-device)
+        const updates = {
+          deviceIds: keyData.deviceIds ? [...keyData.deviceIds, deviceId] : [deviceId],
+          currentDevices: (keyData.currentDevices || 0) + 1
+        };
+        if (!keyData.activated) {  // إذا أول تفعيل، أضف activationTime و expirationTime
+          updates.activated = true;
+          updates.activationTime = activationTime;
+          updates.expirationTime = expirationTime;
+        }
+
+        await update(keyRef, updates);
+        console.log('تم تحديث المفتاح في Firebase (دعم multi-device)');
+
+        // تعديل: لا remove(keyRef) - احتفظ به للأجهزة الأخرى
+
+        const subData = {
+          key: key,
+          subscriptionType: keyData.subscriptionType,
+          activationTime,
+          expirationTime,
+          deviceId,
+          maxDevices: keyData.maxDevices || 1  // حفظ للتحقق المحلي إذا لزم
+        };
+        localStorage.setItem('subscriptionData', JSON.stringify(subData));
+        sessionStorage.setItem('subscriptionData', JSON.stringify(subData));
+        console.log('تم حفظ الاشتراك - بدء العداد وفتح الأقسام');
+
+        startSubscriptionTimer(subData); // هذا يستدعي toggleSections(true)
+
+        showStatus(`تم تفعيل الاشتراك بنجاح! نوع: ${keyData.subscriptionType}. يتبقى: ${formatTimeRemaining(duration)}. (جهاز ${keyData.currentDevices + 1} من ${keyData.maxDevices || 1})`, 'success');
+        subscriptionKeyInput.value = '';
+
+      } catch (error) {
+        console.error('خطأ في التفعيل: ', error);
+        showStatus('خطأ: ' + error.message, 'error');
+      } finally {
+        activateBtn.innerHTML = '<i class="fas fa-unlock"></i> تفعيل الاشتراك';
+        activateBtn.disabled = false;
+      }
+    });
+
+    // دالة عرض الرسائل (غير)
+    function showStatus(message, type) {
+      activationStatus.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+      setTimeout(() => { activationStatus.innerHTML = ''; }, 5000);
+    }
+  </script>
+
+  <script>
+    // عناصر DOM (غير)
+    const menuBtn = document.getElementById("menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const subscriptionModal = document.getElementById('subscriptionModal');
+    const expiredModal = document.getElementById('expiredModal');
+    const goToSettingsBtn = document.getElementById('goToSettingsBtn');
+    const retryActivationBtn = document.getElementById('retryActivationBtn');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const expiredCloseBtn = document.getElementById('expiredCloseBtn');
+    const closeExpiredModal = document.getElementById('closeExpiredModal');
+
+    // دالة إغلاق الـ sidebar (مشتركة) (غير)
+    function closeSidebar() {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+      console.log('تم إغلاق sidebar و overlay');
+    }
+
+    // فتح الـ sidebar (غير)
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+      console.log('تم فتح/إغلاق sidebar');
+    });
+
+    // إغلاق عند النقر على overlay (click و touch أيضًا) (غير)
+    overlay.addEventListener("click", closeSidebar);
+    overlay.addEventListener("touchstart", closeSidebar); // للموبايل
+
+    // إغلاق Modals و sidebar (غير)
+    function closeSubscriptionModal() {
+      subscriptionModal.style.display = 'none';
+      closeSidebar(); // إغلاق sidebar إذا مفتوح
+    }
+
+    function closeExpiredModalFn() {
+      expiredModal.style.display = 'none';
+      closeSidebar(); // إغلاق sidebar إذا مفتوح
+    }
+
+    goToSettingsBtn.addEventListener('click', closeSubscriptionModal);
+    retryActivationBtn.addEventListener('click', () => {
+      closeExpiredModalFn();
+      activationForm.scrollIntoView({ behavior: 'smooth' });
+      subscriptionKeyInput.focus();
+      subscriptionKeyInput.value = '';
+    });
+
+    modalCloseBtn.addEventListener('click', closeSubscriptionModal);
+    closeModalBtn.addEventListener('click', closeSubscriptionModal);
+    expiredCloseBtn.addEventListener('click', closeExpiredModalFn);
+    closeExpiredModal.addEventListener('click', closeExpiredModalFn);
+
+    window.addEventListener('click', function(e) {
+      if (e.target === subscriptionModal) closeSubscriptionModal();
+      if (e.target === expiredModal) closeExpiredModalFn();
+    });
+
+    // تعديل: إزالة media query التلقائي، والاعتماد على initTheme() في JS (مثل admin)
+  </script>
+  <script>
+// منع قائمة السياق (الضغطة المطولة) على جميع الروابط (غير)
+document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('a');
+    
+    links.forEach(link => {
+        link.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // منع أيضًا حدث touch الطويل (للهواتف)
+        link.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                this.longPressTimer = setTimeout(() => {
+                    e.preventDefault();
+                }, 500);
+            }
+        });
+        
+        link.addEventListener('touchend', function(e) {
+            clearTimeout(this.longPressTimer);
+        });
+        
+        link.addEventListener('touchmove', function(e) {
+            clearTimeout(this.longPressTimer);
+        });
+    });
+});
+</script>
+
+</body>
+</html>

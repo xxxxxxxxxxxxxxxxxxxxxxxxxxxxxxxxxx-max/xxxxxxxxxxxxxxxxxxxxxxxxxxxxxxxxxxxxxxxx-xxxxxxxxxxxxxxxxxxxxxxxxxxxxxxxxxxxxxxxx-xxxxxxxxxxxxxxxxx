@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="refresh" content="10 url=dashboard/dashboard.html">
+  <title>ترحيب بطبيبي - تطبيق طبيبي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    -webkit-user-select: none;  /* Safari */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge */
+    user-select: none; 
+    }
+
+    /* Light Mode (افتراضي - نهاري: أزرق مظلم كما طلبت) */
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); /* أزرق مظلم طبي هادئ */
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* Internet Explorer/Edge */
+    user-select: text;          /* Non-prefixed version */
+}
+    .container {
+      width: 100%;
+      max-width: 700px;
+      padding: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* أيقونة */
+    .logo {
+      font-size: 60px;
+      margin-bottom: 15px;
+      color: #e8f5e8; /* أخضر فاتح للأيقونة للتباين مع الأزرق المظلم */
+      animation: pulse 2s infinite, fadeSlide 1.5s forwards infinite;
+      opacity: 0;
+      transform: translateY(-40px);
+      filter: drop-shadow(0 0 10px rgba(232, 245, 232, 0.5)); /* إبراز خفيف */
+    }
+
+    /* ECG */
+    .ecg-container {
+      width: 100%;
+      max-width: 200px;
+      margin: 20px auto;
+    }
+
+    .ecg-svg {
+      width: 100%;
+      height: 100px;
+    }
+
+    .ecg-line {
+      fill: none;
+      stroke: #e8f5e8; /* أخضر فاتح للتباين في الأزرق المظلم */
+      stroke-width: 2;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawECG 2s linear infinite;
+      filter: drop-shadow(0 0 2px rgba(232, 245, 232, 0.3));
+    }
+
+    .ecg-dot {
+      visibility:hidden;
+    }
+
+    /* تحريك الرسم */
+    @keyframes drawECG {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* النصوص */
+    h1 {
+      font-size: 48px;
+      margin: 0;
+      letter-spacing: 2px;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeSlide 2s forwards 2s;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* ظل خفيف للقراءة */
+    }
+
+    .txt1 {
+      font-size: 18px;
+      margin-top: 15px;
+      color: #bbdefb; /* أزرق فاتح للتباين */
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeSlide 2s forwards 3s;
+    }
+
+    /* التذييل */
+    .txt2 {
+      font-size: 12px;
+      color: #bbdefb;
+      position: absolute;
+      bottom: 10px;
+      transform: translateY(-50%);
+      opacity: 0;
+      animation: fadeSlide 2s forwards 4s;
+      text-align: center;
+    }
+
+    /* أنيميشن */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    @keyframes fadeSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dark Mode (تلقائي حسب إعدادات الجهاز - ليلي: dark حقيقي) */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%); /* أسود/رمادي مظلم حقيقي، هادئ تمامًا */
+        color: #e0e0e0; /* نصوص رمادي فاتح للدارك */
+      }
+
+      .logo {
+        color: #4caf50; /* أخضر طبي فاتح للأيقونة في الدارك */
+        filter: drop-shadow(0 0 12px rgba(76, 175, 80, 0.6)); /* إبراز أخضر خفيف للتباين على الأسود */
+      }
+
+      .ecg-line {
+        stroke: #4caf50; /* أخضر طبي بدلاً من الأبيض/الأزرق للتوافق مع الدارك */
+        filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.4));
+      }
+
+      .ecg-dot {
+        visibility:hidden;
+      }
+
+      h1 {
+        color: #e0e0e0;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7); /* ظل أقوى في الدارك للقراءة المثالية */
+      }
+
+      .txt1 {
+        color: #b0bec5; /* رمادي فاتح هادئ */
+      }
+
+      .txt2 {
+        color: #b0bec5;
+      }
+
+      /* تعديل على pulse في الدارك ليكون أهدأ (opacity أقل لتجنب الإرهاق) */
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.95; }
+        50% { transform: scale(1.1); opacity: 0.75; }
+      }
+    }
+
+    /* Responsive - للشاشات الصغيرة/الكبيرة */
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+
+      .logo {
+        font-size: 50px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .txt1 {
+        font-size: 16px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        max-width: 900px;
+        padding: 40px;
+      }
+
+      .logo {
+        font-size: 80px;
+      }
+
+      h1 {
+        font-size: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- أيقونة -->
+    <div class="logo"><i class="fas fa-stethoscope"></i></div>
+
+    <!-- ECG مع خط أخضر طبي في الدارك ونقطة خضراء -->
+    <div class="ecg-container">
+      <svg class="ecg-svg" viewBox="0 0 500 100" preserveAspectRatio="none">
+        <polyline id="ecg-path" class="ecg-line"
+          points="0,50 40,50 70,10 100,90 140,50 180,50 210,20 240,80 280,50 320,50 350,10 380,90 420,50 460,50 500,50" />
+        <circle class="ecg-dot" r="4" visibility="visible"> <!-- جعلت r=4 لتكون مرئية دائمًا، مع animateMotion -->
+          <animateMotion dur="3s" repeatCount="indefinite">
+            <mpath href="#ecg-path"/>
+          </animateMotion>
+        </circle>
+      </svg>
+    </div>
+
+    <!-- اسم التطبيق -->
+    <h1>طــبــيبي</h1>
+    <p class="txt1">أول تطبيق ذكاء اصطناعي طبي في سوريا</p>
+  </div>
+
+  <!-- التذييل -->
+  <p class="txt2">By Kaspa-ai ©</p>
+</body>
+</html>

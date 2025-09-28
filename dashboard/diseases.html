@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>قسم الأمراض - نظام طبي متقدم</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables للـThemes (مدمج مع dashboard.html) */
+    :root {
+      /* Light Mode (افتراضي) */
+      --bg-color: #f5f7fb;
+      --card-bg: #ffffff;
+      --text-color: #111827;
+      --secondary-text: #6b7280;
+      --border-color: #d1d5db;
+      --primary-blue: #1e88e5;
+      --button-bg: #1e88e5;
+      --button-hover: #0d9488;
+      --secondary-button-bg: #f1f1f1;
+      --secondary-button-hover: #ddd;
+      --notice-bg: #fff7ed;
+      --notice-border: #f59e0b;
+      --notice-text: #92400e;
+      --danger-bg: #fee2e2;
+      --danger-border: #ef4444;
+      --danger-text: #dc2626;
+      --pre-bg: #0f172a;
+      --pre-text: #f8fafc;
+      --shadow-light: rgba(0,0,0,.08);
+      --table-border: #e5e7eb;
+      --table-even: #f9fafb;
+      --icon-color: #1e88e5;
+      --spinner-border: rgba(0,0,0,0.08);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #60a5fa; /* لون النص المتحرك */
+      --info-box-bg: #f1f1f1; /* للـ info-boxes في light */
+      --info-box-shadow: rgba(0,0,0,0.05); /* للـ shadow في light */
+      --search-bg: rgba(255, 255, 255, 0.9);
+      --btn-primary: linear-gradient(135deg, #1e88e5, #42a5f5);
+      --btn-search: linear-gradient(135deg, #ff9800, #ffb74d);
+    }
+
+    [data-theme="dark"] {
+      /* Dark Mode */
+      --bg-color: #1a1a1a;
+      --card-bg: #2c2c2c;
+      --text-color: #f3f4f6;
+      --secondary-text: #9ca3af;
+      --border-color: #4b5563;
+      --primary-blue: #64b5f6;
+      --button-bg: #0d9488;
+      --button-hover: #0f766e;
+      --secondary-button-bg: #2a2a2a;
+      --secondary-button-hover: #3a3a3a;
+      --notice-bg: #7c2d12;
+      --notice-border: #dc2626;
+      --notice-text: #fecaca;
+      --danger-bg: #991b1b;
+      --danger-border: #b91c1c;
+      --danger-text: #fca5a5;
+      --pre-bg: #374151;
+      --pre-text: #f3f4f6;
+      --shadow-light: rgba(0,0,0,.3);
+      --table-border: #374151;
+      --table-even: #1f2937;
+      --icon-color: #64b5f6;
+      --spinner-border: rgba(255,255,255,0.1);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #a5b4fc; /* لون النص المتحرك في الدارك */
+      --info-box-bg: #2a2a2a; /* للـ info-boxes في dark */
+      --info-box-shadow: rgba(255,255,255,0.05); /* للـ shadow في dark */
+      --search-bg: rgba(30, 40, 50, 0.95);
+      --btn-primary: linear-gradient(135deg, #0d47a1, #1976d2);
+      --btn-search: linear-gradient(135deg, #f57c00, #ff9800);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+
+    a { text-decoration: none; }
+
+    /* الهيدر (مدمج من dashboard.html مع تعديل: زر رجوع) */
+    header {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    header .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    header small {
+      font-size: 13px;
+      color: #e3f2fd;
+      margin-top: 2px;
+    }
+
+    /* زر الرجوع (بدلاً من hamburger) */
+    #back-btn {
+      font-size: 26px;
+      background: var(--secondary-button-bg);
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+      font-weight: bold;
+    }
+
+    #back-btn:hover { 
+      background: var(--secondary-button-hover);
+    }
+
+    /* الفوتر (مدمج من dashboard.html) */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: var(--primary-blue);
+      color: #fff;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      margin-top: auto; /* لدفع الفوتر للأسفل */
+    }
+
+    .welcome-phrase {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--animated-text-color);
+      margin: 15px 20px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05));
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .welcome-phrase {
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.1), rgba(165, 180, 252, 0.05));
+    }
+
+    .welcome-phrase i {
+      color: var(--icon-color);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px 20px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* مربعات التاريخ والوقت / العدد (بجانب بعض: row دائمًا، responsive column) */
+    .info-boxes {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      text-align: center;
+      margin: 20px 0;
+      width: 100%;
+    }
+
+    .info-boxes div {
+      flex: 1;
+      background: var(--info-box-bg);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px var(--info-box-shadow);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .info-boxes h4 {
+      margin-bottom: 10px;
+      color: var(--primary-blue);
+      transition: color 0.3s;
+      font-size: 14px;
+    }
+
+    .info-boxes p {
+      margin: 0;
+      font-size: 16px;
+      color: var(--text-color);
+    }
+
+    .search-container {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .search-container h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .search-input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    #diseaseSearch {
+      width: 100%;
+      padding: 15px 20px 15px 50px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 18px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      background: var(--search-bg);
+      color: var(--text-color);
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+    }
+
+    #diseaseSearch:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(30,136,229,0.1);
+      outline: none;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--icon-color);
+      font-size: 20px;
+      z-index: 1;
+    }
+
+    .suggestions-container {
+      margin-top: 20px;
+      display: none;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-light);
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .suggestions-container.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    .suggestion-item {
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-color);
+      font-weight: 400;
+    }
+
+    .suggestion-item:hover,
+    .suggestion-item.selected {
+      background: rgba(30,136,229,0.05);
+      color: var(--primary-blue);
+      transform: translateX(-5px);
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-item i {
+      font-size: 16px;
+      color: var(--icon-color);
+      width: 20px;
+    }
+
+    .no-results {
+      padding: 20px;
+      text-align: center;
+      color: var(--secondary-text);
+      font-style: italic;
+    }
+
+    .ai-btn {
+      background: var(--btn-primary);
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px auto 0;
+      width: fit-content;
+    }
+
+    .ai-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow-light);
+    }
+
+    .ai-btn:disabled {
+      background: var(--border-color);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .ai-btn.loading::after {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .disclaimer {
+      font-size: 12px;
+      color: var(--secondary-text);
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    .selected-disease {
+      background: linear-gradient(135deg, rgba(30,136,229,0.1), rgba(30,136,229,0.05));
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 15px;
+      text-align: center;
+      border-left: 4px solid var(--primary-blue);
+      display: none;
+    }
+
+    .selected-disease.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .disease-description {
+      font-size: 16px;
+      margin: 10px 0;
+      font-weight: 500;
+      color: var(--secondary-text);
+    }
+
+    /* كارد النتيجة من AI (مثل response في xray) */
+    #aiResponse {
+      margin-top: 20px;
+      display: none;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      border-left: 4px solid var(--primary-blue);
+    }
+
+    #aiResponse.show {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    #aiResponse h3 {
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 0;
+    }
+
+    #aiResponse pre {
+      white-space: pre-wrap;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      overflow: auto;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+      max-width: 150px;
+    }
+
+    .copy-btn {
+      background: #2980b9;
+    }
+
+    .copy-btn:hover {
+      background: #3498db;
+    }
+
+    .print-btn {
+      background: #27ae60;
+    }
+
+    .print-btn:hover {
+      background: #2ecc71;
+    }
+
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header { padding: 10px 15px; }
+      header h1 { font-size: 20px; }
+      #back-btn { font-size: 18px; padding: 8px 12px; }
+      .welcome-phrase { margin: 10px 15px; font-size: 14px; }
+      .main-content { padding: 10px 15px 20px; }
+      .search-container { padding: 20px; margin: 10px; }
+      #diseaseSearch { font-size: 16px; padding: 12px 15px 12px 40px; }
+      .info-boxes { flex-direction: column; gap: 10px; }
+      .action-buttons { flex-direction: column; }
+      footer { padding: 10px; font-size: 12px; }
+    }
+
+    /* Dark Mode تحسينات (مدمج من dashboard.html) */
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    [data-theme="dark"] input::placeholder,
+    [data-theme="dark"] textarea::placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input::-webkit-input-placeholder,
+    [data-theme="dark"] textarea::-webkit-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input:-ms-input-placeholder,
+    [data-theme="dark"] textarea:-ms-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input[readonly],
+    [data-theme="dark"] input[readonly="readonly"] {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] #back-btn {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #back-btn:hover {
+      background: var(--secondary-button-hover);
+    }
+  </style>
+</head>
+<body data-theme="light">  <!-- افتراضي light، يتغير تلقائيًا -->
+
+  <!-- الهيدر (مدمج ومعدل من dashboard.html) -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
+      <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
+    </div>
+    <button id="back-btn">
+      <i class="fas fa-arrow-left"></i> رجوع
+    </button>
+  </header>
+
+  <!-- النص الثابت تحت الهيدر (كما طلبت: "ابحث عن أعراضك واحصل على تحليل دقيق وآمن") -->
+  <div class="welcome-phrase">
+    <i class="fas fa-pills"></i> ابحث عن أعراضك واحصل على تحليل دقيق وآمن
+  </div>
+
+  <div class="main-content">
+    <!-- مربعات التاريخ والوقت / العدد (بجانب بعض: row في الديسكتوب، column في الموبايل) -->
+    <div class="card">
+      <div class="info-boxes">
+        <div>
+          <h4>📅 تاريخ ووقت اليوم</h4>
+          <p id="today-date"></p>
+        </div>
+        <div>
+          <h4>📝 عدد الاستعلامات</h4>
+          <p id="query-count">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <h2><i class="fas fa-search"></i> ابحث عن مرض</h2>
+      <p style="text-align: center; color: var(--secondary-text); margin-bottom: 20px;">
+        اكتب اسم المرض (مثل "إنفلونزا") لتظهر الاقتراحات تلقائيًا
+      </p>
+      
+      <div class="search-input-group">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="diseaseSearch" placeholder="ابدأ بالكتابة... (مثال: إنفلونزا، سكري)" autocomplete="off">
+      </div>
+
+      <!-- عرض المرض المختار هنا -->
+      <div id="selectedDiseaseSection" class="selected-disease">
+        <h3><i class="fas fa-check-circle"></i> المرض المختار: <span id="selectedDiseaseName"></span></h3>
+        <div id="diseaseDescription" class="disease-description">
+          اضغط على الزر أدناه لإرسال اسم المرض إلى الذكاء الاصطناعي للحصول على تفاصيل وتحليل.
+        </div>
+      </div>
+
+      <div id="suggestionsContainer" class="suggestions-container">
+        <!-- الاقتراحات ستظهر هنا -->
+      </div>
+
+      <!-- الزر للـAI سيتم إضافته ديناميكيًا -->
+      <div id="aiButtonContainer"></div>
+
+      <div class="disclaimer">
+        <i class="fas fa-info-circle"></i> هذا النظام للمساعدة الطبية فقط. استشر طبيبًا متخصصًا للتشخيص الدقيق.
+      </div>
+    </div>
+
+    <!-- كارد النتيجة من AI (مخفي) -->
+    <div id="aiResponse" class="card">
+      <h3><i class="fas fa-robot"></i> تحليل الذكاء الاصطناعي</h3>
+      <pre id="aiResultText"></pre>
+      <div class="action-buttons">
+        <button class="action-btn copy-btn" id="copyAi"><i class="fas fa-copy"></i> نسخ</button>
+        <button class="action-btn print-btn" onclick="window.print()"><i class="fas fa-print"></i> طباعة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- الفوتر (مدمج من dashboard.html) -->
+  <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
+
+  <script>
+    // معالج زر الرجوع (جديد: يعود إلى الصفحة السابقة أو dashboard.html)
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.getElementById('back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          if (window.history.length > 1) {
+            window.history.back(); // إذا كان هناك تاريخ، ارجع للخلف
+          } else {
+            window.location.href = 'dashboard.html'; // إلا، اذهب إلى dashboard
+          }
+        });
+      }
+    });
+
+    // كود الـDark Mode التلقائي (مثل prescription و xray)
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches ? 'dark' : 'light');
+    });
+
+    // تاريخ ووقت اليوم (مخصص للتنسيق المطلوب: يوم/شهر/سنة ساعة:دقيقة:ثانية م/ص، مع أرقام عربية)
+    function updateDateTime() {
+      const now = new Date();
+      
+      // تنسيق التاريخ: يوم/شهر/سنة (مثل ٢٣/٩/٢٠٢٥)
+      const dateOptions = { 
+        day: 'numeric', 
+        month: 'numeric', 
+        year: 'numeric',
+        timeZone: 'UTC' // لضمان التنسيق
+      };
+      const dateStr = now.toLocaleDateString('ar-EG', dateOptions).replace(/‏/g, ''); // إزالة علامات RTL إذا لزم
+      
+      // تنسيق الوقت: ساعة:دقيقة:ثانية م/ص (مثل ٧:٠٠:٢٧ م)
+      const timeOptions = { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        second: '2-digit',
+        hour12: true // لـ AM/PM (م/ص)
+      };
+      const timeStr = now.toLocaleTimeString('ar-EG', timeOptions).replace(/\s*م\s*/g, ' م').replace(/\s*ص\s*/g, ' ص');
+      
+      // دمج: التاريخ الوقت (مثل: ٢٣/٩/٢٠٢٥ ٧:٠٠:٢٧ م)
+      const fullStr = `${dateStr.replace(/\//g, '‏/‏')} ${timeStr}`; // إضافة علامات RTL للفواصل إذا لزم
+      
+      document.getElementById("today-date").textContent = fullStr;
+    }
+    setInterval(updateDateTime, 1000); // تحديث كل ثانية
+    updateDateTime(); // عرض فوري
+
+    // عداد الاستعلامات (يزيد عند نجاح AI)
+    let queryCount = 0;
+    const queryCountEl = document.getElementById("query-count");
+    function incrementQueryCount() {
+      queryCount++;
+      queryCountEl.textContent = queryCount;
+    }
+
+    let allDiseases = []; // array من الأسماء فقط
+    let filteredDiseases = [];
+    let selectedDisease = null;
+
+    // بيانات fallback قصيرة (أسماء فقط) إذا فشل JSON
+    const fallbackDiseases = [
+      "إنفلونزا", "التهاب الرئة", "سكري", "ربو", "أكزيما", "حساسية", "سرطان", "التهاب المفاصل",
+      "زهايمر", "باركنسون", "القلب", "الكبد", "كلى", "الدماغ", "الجلد", "القولون", "المعدة",
+      "الغدة الدرقية", "الإمساك", "إسهال"
+    ];
+
+    // تهيئة: تحميل JSON (مع fallback)
+    async function init() {
+      try {
+        const response = await fetch('./scripts/json/diseases.json');
+        if (response.ok) {
+          const data = await response.json();
+          allDiseases = data.diseases || fallbackDiseases;
+          console.log(`تم تحميل ${allDiseases.length} مرض من JSON`);
+        } else {
+          throw new Error('فشل في التحميل');
+        }
+      } catch (error) {
+        console.warn('استخدام بيانات fallback للأمراض:', error);
+        allDiseases = fallbackDiseases;
+      }
+      setupSearch();
+    }
+
+    function setupSearch() {
+      const searchInput = document.getElementById('diseaseSearch');
+      const suggestionsContainer = document.getElementById('suggestionsContainer');
+
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        if (query.length < 1) {
+          suggestionsContainer.classList.remove('show');
+          return;
+        }
+
+        filteredDiseases = allDiseases.filter(disease => 
+          disease.toLowerCase().includes(query)
+        );
+
+        if (filteredDiseases.length === 0) {
+          suggestionsContainer.innerHTML = '<div class="no-results"><i class="fas fa-search"></i> لا توجد نتائج مطابقة. جرب كلمات أخرى.</div>';
+        } else {
+          let html = '';
+          filteredDiseases.slice(0, 20).forEach((disease) => { // حد أقصى 20 للأداء
+            html += `
+              <div class="suggestion-item" onclick="selectDisease('${disease.replace(/'/g, "\\'")}')">
+                <i class="fas fa-diagnoses"></i> ${disease}
+              </div>
+            `;
+          });
+          if (filteredDiseases.length > 20) {
+            html += '<div class="no-results">... و${filteredDiseases.length - 20} نتائج أخرى</div>';
+          }
+          suggestionsContainer.innerHTML = html;
+        }
+
+        suggestionsContainer.classList.add('show');
+      });
+
+      // إخفاء الاقتراحات عند الضغط خارجها
+      document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+          suggestionsContainer.classList.remove('show');
+        }
+      });
+
+      // Enter للاختيار الأول
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && filteredDiseases.length > 0) {
+          selectDisease(filteredDiseases[0]);
+        }
+      });
+    }
+
+    function selectDisease(disease) {
+      selectedDisease = disease;
+      document.getElementById('diseaseSearch').value = disease;
+      document.getElementById('suggestionsContainer').classList.remove('show');
+      
+      // عرض المرض المختار
+      const selectedSection = document.getElementById('selectedDiseaseSection');
+      const selectedName = document.getElementById('selectedDiseaseName');
+      selectedName.textContent = disease;
+      selectedSection.classList.add('show');
+      
+      // إضافة زر AI
+      sendToAIInline(disease);
+    }
+
+    async function sendToAIInline(disease) {
+      // إزالة الزر السابق إذا موجود
+      const existingBtn = document.querySelector('.ai-btn');
+      if (existingBtn) existingBtn.remove();
+      
+      const aiBtn = document.createElement('button');
+      aiBtn.className = 'ai-btn';
+      aiBtn.innerHTML = '<i class="fas fa-robot"></i> إرسال إلى الذكاء الاصطناعي';
+      aiBtn.onclick = async function() {
+        this.disabled = true;
+        this.classList.add('loading');
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحليل...';
+
+        try {
+          const prompt = `أنت طبيب متخصص في الأمراض. قدم تحليلًا مفصلًا ودقيقًا للمرض: "${disease}". 
+شمل: الأعراض الرئيسية، الأسباب، التشخيص، العلاج، الوقاية، والمخاطر. 
+اجعل الرد بالعربية، منظمًا، وآمنًا (لا تُشخّص بشكل نهائي).`;
+
+          const completion = await puter.ai.chat([{ role: "user", content: prompt }], { model: "gpt-5" });
+          let aiResponse = "";
+          if (completion?.message?.content) {
+            aiResponse = completion.message.content;
+          } else if (completion?.output_text) {
+            aiResponse = completion.output_text;
+          } else {
+            aiResponse = JSON.stringify(completion);
+          }
+
+          // عرض النتيجة
+          const aiResultText = document.getElementById('aiResultText');
+          aiResultText.textContent = aiResponse;
+          document.getElementById('aiResponse').classList.add('show');
+          incrementQueryCount(); // زيادة العداد
+
+          // تنظيف
+          this.innerHTML = '<i class="fas fa-robot"></i> إرسال مرة أخرى';
+        } catch (err) {
+          alert(`⚠️ <i class="fas fa-exclamation-triangle"></i> خطأ في التحليل: ${err.message}`);
+          this.innerHTML = '<i class="fas fa-robot"></i> إرسال مرة أخرى';
+        }
+        this.disabled = false;
+        this.classList.remove('loading');
+      };
+      document.getElementById('aiButtonContainer').appendChild(aiBtn);
+    }
+
+    // نسخ نتيجة AI
+    document.getElementById('copyAi').onclick = () => {
+      const aiText = document.getElementById('aiResultText').textContent;
+      navigator.clipboard.writeText(aiText).then(() => {
+        alert("<i class='fas fa-check'></i> تم النسخ بنجاح");
+      }).catch(() => {
+        alert("حدث خطأ في النسخ");
+      });
+    };
+
+    // تهيئة الصفحة
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+  <title>مولّد وصفة طبية — نسخة محسّنة</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    /* CSS Variables للـThemes (مدمج مع dashboard.html) */
+    :root {
+      /* Light Mode (افتراضي) */
+      --bg-color: #f5f7fb;
+      --card-bg: #ffffff;
+      --text-color: #111827;
+      --secondary-text: #6b7280;
+      --border-color: #d1d5db;
+      --primary-blue: #1e88e5;
+      --button-bg: #1e88e5;
+      --button-hover: #0d9488;
+      --secondary-button-bg: #f1f1f1;
+      --secondary-button-hover: #ddd;
+      --notice-bg: #fff7ed;
+      --notice-border: #f59e0b;
+      --notice-text: #92400e;
+      --danger-bg: #fee2e2;
+      --danger-border: #ef4444;
+      --danger-text: #dc2626;
+      --pre-bg: #0f172a;
+      --pre-text: #f8fafc;
+      --shadow-light: rgba(0,0,0,.08);
+      --table-border: #e5e7eb;
+      --table-even: #f9fafb;
+      --icon-color: #1e88e5;
+      --spinner-border: rgba(0,0,0,0.08);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #60a5fa; /* لون النص المتحرك */
+      --info-box-bg: #f1f1f1; /* للـ info-boxes في light، مشابه dashboard */
+      --info-box-shadow: rgba(0,0,0,0.05); /* للـ shadow في light */
+      --success-green: #4caf50;
+    }
+
+    [data-theme="dark"] {
+      /* Dark Mode */
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --secondary-text: #b0b0b0;
+      --border-color: #4b5563;
+      --primary-blue: #0d47a1;
+      --button-bg: #0d47a1;
+      --button-hover: #0f766e;
+      --secondary-button-bg: #2a2a2a;
+      --secondary-button-hover: #3a3a3a;
+      --notice-bg: #7c2d12;
+      --notice-border: #dc2626;
+      --notice-text: #fecaca;
+      --danger-bg: #991b1b;
+      --danger-border: #b91c1c;
+      --danger-text: #fca5a5;
+      --pre-bg: #374151;
+      --pre-text: #f3f4f6;
+      --shadow-light: rgba(255,255,255,0.05);
+      --table-border: #374151;
+      --table-even: #1f2937;
+      --icon-color: #90caf9;
+      --spinner-border: rgba(255,255,255,0.1);
+      --conf-high: #16a34a;
+      --conf-moderate: #f97316;
+      --conf-low: #dc2626;
+      --animated-text-color: #a5b4fc; /* لون النص المتحرك في الدارك */
+      --info-box-bg: #2a2a2a; /* للـ info-boxes في dark، مشابه dashboard */
+      --info-box-shadow: rgba(255,255,255,0.05); /* للـ shadow في dark */
+      --success-green: #388e3c;
+    }
+  /* منع تحديد النص في كامل الموقع */
+* {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;  /* Safari */
+    -khtml-user-select: none;   /* Konqueror HTML */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge */
+    user-select: none;          /* Non-prefixed version */
+}
+
+/* استثناء للحقول حتى يتمكن المستخدم من الكتابة */
+input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* Internet Explorer/Edge */
+    user-select: text;          /* Non-prefixed version */
+}
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    a { text-decoration: none; }
+
+    /* الهيدر (مدمج من dashboard.html مع تعديل: زر رجوع) */
+    header {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    header .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    header small {
+      font-size: 13px;
+      color: #e3f2fd;
+      margin-top: 2px;
+    }
+
+    /* زر الرجوع (بدلاً من hamburger) */
+    #back-btn {
+      font-size: 26px;
+      background: var(--secondary-button-bg);
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+      font-weight: bold;
+    }
+
+    #back-btn:hover { 
+      background: var(--secondary-button-hover);
+    }
+
+    /* الفوتر (مدمج من dashboard.html) */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: var(--primary-blue);
+      color: #fff;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      margin-top: auto; /* لدفع الفوتر للأسفل */
+    }
+
+    main {
+      flex: 1;
+      padding: 20px 0;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      padding: 18px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* النص المتحرك متعدد المقاطع في الـHeader */
+    .animated-phrase {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--animated-text-color);
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05));
+      backdrop-filter: blur(10px);
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    [data-theme="dark"] .animated-phrase {
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.1), rgba(165, 180, 252, 0.05));
+    }
+
+    .animated-phrase.show {
+      opacity: 1;
+      animation: fadeGlow 3s ease-in-out infinite;
+    }
+
+    .animated-phrase::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s linear infinite;
+      opacity: 0;
+    }
+
+    .animated-phrase.show::before {
+      opacity: 1;
+    }
+
+    @keyframes fadeGlow {
+      0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(96, 165, 250, 0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.02);
+        text-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+      }
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    h1 i {
+      font-size: 1.5rem;
+      color: var(--icon-color);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+
+    h2 i {
+      font-size: 1.2rem;
+      color: var(--icon-color);
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text-color);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      box-sizing: border-box;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      background: var(--button-bg);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--button-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn.secondary {
+      background: var(--secondary-button-bg);
+      color: var(--text-color); /* للتوافق مع dark */
+    }
+
+    .btn.secondary:hover {
+      background: var(--secondary-button-hover);
+    }
+
+    .btn:disabled {
+      background: var(--border-color);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn i {
+      font-size: 1.1rem;
+    }
+
+    .muted {
+      color: var(--secondary-text);
+      font-size: 13px;
+    }
+
+    .notice {
+      background: var(--notice-bg);
+      border-left: 4px solid var(--notice-border);
+      padding: 10px;
+      border-radius: 6px;
+      color: var(--notice-text);
+      font-size: 13px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notice i {
+      font-size: 1.1rem;
+      color: var(--notice-border);
+    }
+
+    .danger {
+      background: var(--danger-bg);
+      border-left: 4px solid var(--danger-border);
+      color: var(--danger-text);
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .danger i {
+      font-size: 1.1rem;
+      color: var(--danger-border);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      overflow: auto;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid var(--spinner-border);
+      border-top-color: var(--primary-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .table-container {
+      overflow-x: auto;
+      width: 100%;
+      -webkit-overflow-scrolling: touch; /* للموبايل */
+      border-radius: 10px;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    .rx-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+      table-layout: fixed; /* ضمان توزيع ثابت للأعمدة بدون تداخل */
+      direction: rtl; /* RTL للجدول ككل */
+    }
+
+    .rx-table th {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 12px 8px; /* padding أفضل للـRTL */
+      text-align: center;
+      font-size: 14px; /* حجم مناسب لتجنب الالتفاف */
+      font-weight: bold;
+      white-space: nowrap; /* منع الالتفاف تمامًا للعناوين */
+      overflow: hidden;
+      text-overflow: ellipsis; /* إخفاء الزائد بـ... إذا لزم */
+      border: none;
+      position: relative;
+      min-width: 80px; /* عرض أدنى لكل عمود لتجنب الضيق */
+      max-width: 120px; /* حد أقصى للعمود الطويل مثل تعليمات */
+    }
+
+    /* توزيع عرض الأعمدة بشكل متوازن */
+    .rx-table th:nth-child(1) { width: 20%; } /* الدواء - أوسع */
+    .rx-table th:nth-child(2) { width: 10%; } /* الشكل */
+    .rx-table th:nth-child(3) { width: 12%; } /* الجرعة */
+    .rx-table th:nth-child(4) { width: 10%; } /* التكرار */
+    .rx-table th:nth-child(5) { width: 10%; } /* المدة */
+    .rx-table th:nth-child(6) { width: 25%; } /* تعليمات - أطول */
+    .rx-table th:nth-child(7) { width: 13%; } /* الثقة */
+
+    .rx-table th i {
+      font-size: 0.9rem;
+      margin-right: 4px; /* مسافة RTL بين الأيقونة والنص */
+      vertical-align: middle;
+    }
+
+    .rx-table td {
+      padding: 12px 8px;
+      border: 1px solid var(--table-border);
+      vertical-align: top;
+      transition: background 0.3s ease;
+      direction: rtl;
+      text-align: right; /* محاذاة يمين داخل الخلية */
+      word-wrap: break-word; /* الالتفاف في الخلايا الطويلة فقط */
+      font-size: 13px;
+    }
+
+    .rx-table tr:nth-child(even) {
+      background: var(--table-even);
+    }
+
+    .rx-table tr:hover {
+      background: rgba(30, 136, 229, 0.05);
+    }
+
+    .conf-high {
+      color: var(--conf-high);
+      font-weight: bold;
+    }
+
+    .conf-moderate {
+      color: var(--conf-moderate);
+      font-weight: bold;
+    }
+
+    .conf-low {
+      color: var(--conf-low);
+      font-weight: bold;
+    }
+
+    .rx-table .muted {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* مربعات التاريخ والعد (مثل dashboard.html تمامًا) */
+    .info-boxes {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .info-boxes div {
+      flex: 1;
+      background: var(--info-box-bg);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px var(--info-box-shadow);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .info-boxes h4 {
+      margin-bottom: 10px;
+      color: var(--primary-blue);
+      transition: color 0.3s;
+    }
+
+    .info-boxes p {
+      margin: 0;
+      font-size: 16px;
+      color: var(--text-color);
+    }
+
+    /* Responsive تحسين للموبايل - جدول يتدفق أفقيًا */
+    @media (max-width: 768px) {
+      header { padding: 10px 15px; }
+      header h1 { font-size: 20px; }
+      #back-btn { font-size: 18px; padding: 8px 12px; }
+      main { padding: 10px 0; }
+      .wrap {
+        margin: 0 auto;
+        padding: 10px;
+      }
+      .cols-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .animated-phrase {
+        font-size: 14px;
+        padding: 8px 15px;
+      }
+
+      .rx-table {
+        font-size: 12px;
+      }
+
+      .rx-table th {
+        font-size: 11px;
+        padding: 8px 4px;
+        min-width: 60px;
+      }
+
+      .rx-table td {
+        font-size: 11px;
+        padding: 8px 4px;
+      }
+
+      .info-boxes {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .info-boxes div {
+        padding: 12px;
+      }
+
+      .info-boxes h4 {
+        font-size: 14px;
+      }
+
+      .info-boxes p {
+        font-size: 15px;
+      }
+
+      footer { padding: 10px; font-size: 12px; }
+
+      /* على الشاشات الصغيرة جدًا، اجعل الجدول عمودي */
+      @media (max-width: 480px) {
+        .rx-table, .rx-table thead, .rx-table tbody, .rx-table th, .rx-table td, .rx-table tr {
+          display: block;
+        }
+
+        .rx-table thead tr {
+          position: absolute;
+          top: -9999px;
+          left: -9999px;
+        }
+
+        .rx-table tr {
+          border: 1px solid var(--table-border);
+          margin-bottom: 10px;
+          border-radius: 8px;
+          padding: 10px;
+          background: var(--card-bg);
+        }
+
+        .rx-table td {
+          border: none;
+          position: relative;
+          padding-left: 50%;
+          text-align: right;
+          border-bottom: 1px solid var(--table-border);
+        }
+
+        .rx-table td:before {
+          content: attr(data-label) ": ";
+          position: absolute;
+          left: 6px;
+          width: 45%;
+          font-weight: bold;
+          color: var(--primary-blue);
+        }
+      }
+    }
+
+    /* Dark Mode تحسينات (مدمج من dashboard.html) */
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    [data-theme="dark"] input::placeholder,
+    [data-theme="dark"] textarea::placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input::-webkit-input-placeholder,
+    [data-theme="dark"] textarea::-webkit-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input:-ms-input-placeholder,
+    [data-theme="dark"] textarea:-ms-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input[readonly],
+    [data-theme="dark"] input[readonly="readonly"] {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] #back-btn {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #back-btn:hover {
+      background: var(--secondary-button-hover);
+    }
+  </style>
+</head>
+<body data-theme="light">  <!-- افتراضي light، يتغير تلقائيًا -->
+
+  <!-- الهيدر (مدمج ومعدل من dashboard.html) -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
+      <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
+    </div>
+    <button id="back-btn">
+      <i class="fas fa-arrow-left"></i>  
+    </button>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="card">
+        <h1><i class="fas fa-pills"></i> مولّد وصفة طبية</h1>
+        <!-- النص المتحرك متعدد المقاطع -->
+        <div class="animated-phrase" id="animatedPhrase"></div>
+      </div>
+
+      <!-- مربعات التاريخ والعد (مثل dashboard.html تمامًا، الآن فوق كل شيء) -->
+      <div class="card">
+        <div class="info-boxes">
+          <div>
+            <h4><i class="fas fa-clock"></i> تاريخ اليوم</h4>
+            <p id="today-date"></p>
+          </div>
+          <div>
+            <h4><i class="fas fa-file-medical"></i> عدد التقارير</h4>
+            <p id="rx-count">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- إدخال بيانات المريض -->
+      <div class="card">
+        <h2><i class="fas fa-user-md"></i> بيانات المريض</h2>
+        <div class="grid cols-2">
+          <div><label><i class="fas fa-birthday-cake" style="margin-left: 0.3rem; color: var(--icon-color);"></i>العمر *</label><input id="p_age" type="number" min="0"></div>
+          <div><label><i class="fas fa-weight" style="margin-left: 0.3rem; color: var(--icon-color);"></i>الوزن (كغ)</label><input id="p_weight" type="number" min="0"></div>
+        </div>
+        <div class="grid cols-2" style="margin-top:12px;">
+          <div>
+            <label><i class="fas fa-venus-mars" style="margin-left: 0.3rem; color: var(--icon-color);"></i>الجنس *</label>
+            <select id="p_gender">
+              <option value="">اختر</option><option value="Male">ذكر</option><option value="Female">أنثى</option>
+            </select>
+          </div>
+          <div>
+            <label><i class="fas fa-heartbeat" style="margin-left: 0.3rem; color: var(--icon-color);"></i>حالات خاصة</label>
+            <select id="p_status">
+              <option value="">لا شيء</option><option value="pregnant">حامل</option><option value="breastfeeding">مرضع</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid cols-2" style="margin-top:12px;">
+          <div id="pregnancyTrimesterBox" style="display:none;">
+            <label><i class="fas fa-child" style="margin-left: 0.3rem; color: var(--icon-color);"></i>ثلث الحمل</label>
+            <select id="p_trimester">
+              <option value="">غير محدد</option>
+              <option value="first">الأول</option>
+              <option value="second">الثاني</option>
+              <option value="third">الثالث</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:12px;">
+          <div><label><i class="fas fa-head-side-virus" style="margin-left: 0.3rem; color: var(--icon-color);"></i>أمراض مزمنة</label><input id="p_conditions" type="text"></div>
+          <div><label><i class="fas fa-allergies" style="margin-left: 0.3rem; color: var(--icon-color);"></i>تحسس دوائي</label><input id="p_allergy" type="text"></div>
+          <div><label><i class="fas fa-pills" style="margin-left: 0.3rem; color: var(--icon-color);"></i>الأدوية الحالية</label><textarea id="p_current"></textarea></div>
+        </div>
+      </div>
+
+      <!-- التشخيص -->
+      <div class="card">
+        <h2><i class="fas fa-stethoscope"></i> التشخيص / سبب العلاج</h2>
+        <textarea id="p_diagnosis" placeholder="وصف التشخيص..."></textarea>
+        <div style="margin-top:12px;">
+          <label><i class="fas fa-exclamation-triangle" style="margin-left: 0.3rem; color: var(--icon-color);"></i>شدة الحالة</label>
+          <select id="p_severity">
+            <option value="">غير محدد</option>
+            <option value="mild">خفيف</option>
+            <option value="moderate">متوسط</option>
+            <option value="severe">شديد</option>
+          </select>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <button id="generateBtn" class="btn"><i class="fas fa-magic"></i> توليد وصفة</button>
+          <button id="clearBtn" class="btn secondary" type="button"><i class="fas fa-trash"></i> مسح الحقول</button>
+          <div id="status" style="margin-left:auto;align-self:center;"></div>
+        </div>
+      </div>
+
+      <!-- الوصفة -->
+      <div id="rxCard" class="card" style="display:none;">
+        <h2><i class="fas fa-file-prescription"></i> مسودة الوصفة</h2>
+        <div id="rxMeta" class="muted"></div>
+        <div class="table-container" id="rxTableArea"></div>
+        <div id="rxRaw" style="display:none;margin-top:10px;"></div>
+        <div class="row" style="margin-top:12px;">
+          <button id="copyRx" class="btn"><i class="fas fa-copy"></i> نسخ</button>
+          <button id="printRx" class="btn secondary"><i class="fas fa-print"></i> طباعة</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- الفوتر (مدمج من dashboard.html) -->
+  <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
+
+  <script>
+    // معالج زر الرجوع (جديد: يعود إلى الصفحة السابقة أو dashboard.html)
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.getElementById('back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          if (window.history.length > 1) {
+            window.history.back(); // إذا كان هناك تاريخ، ارجع للخلف
+          } else {
+            window.location.href = 'dashboard.html'; // إلا، اذهب إلى dashboard
+          }
+        });
+      }
+    });
+
+    // النص المتحرك متعدد المقاطع
+    const phrases = [
+      "<i class='fas fa-heartbeat'></i> رعاية صحية ذكية وآمنة بقوة الذكاء الاصطناعي",
+      "<i class='fas fa-pills'></i> وصفات دقيقة مبنية على بياناتك الطبية",
+      "<i class='fas fa-robot'></i> مساعدك الطبي الآلي لتسريع العلاج",
+      "<i class='fas fa-shield-alt'></i> دقة وأمان في كل وصفة طبية"
+    ];
+    let phraseIndex = 0;
+    const animatedPhrase = document.getElementById("animatedPhrase");
+
+    function showPhrase() {
+      animatedPhrase.classList.remove("show");
+      setTimeout(() => {
+        animatedPhrase.innerHTML = phrases[phraseIndex];
+        animatedPhrase.classList.add("show");
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }, 500);  // fade out delay
+    }
+    setInterval(showPhrase, 4000);  // تغيير كل 4 ثواني
+    showPhrase();  // عرض الأول فورًا
+
+    const genBtn=document.getElementById("generateBtn");
+    const statusEl=document.getElementById("status");
+    const rxCard=document.getElementById("rxCard");
+    const rxTableArea=document.getElementById("rxTableArea");
+    const rxRaw=document.getElementById("rxRaw");
+    const rxMeta=document.getElementById("rxMeta");
+    const copyRx=document.getElementById("copyRx");
+    const printRx=document.getElementById("printRx");
+
+    const pStatus=document.getElementById("p_status");
+    const pregBox=document.getElementById("pregnancyTrimesterBox");
+
+    pStatus.addEventListener("change",()=>{
+      pregBox.style.display = (pStatus.value==="pregnant")?"block":"none";
+    });
+
+    function setStatus(on,msg="جاري التوليد..."){
+      statusEl.innerHTML=on?`<span class="spinner"></span> <i class="fas fa-cog" style="margin-left: 0.5rem; color: var(--icon-color);"></i> ${msg}`:"";
+      genBtn.disabled=on;
+    }
+
+    document.getElementById("clearBtn").onclick=()=>{document.querySelectorAll("input,textarea,select").forEach(el=>el.value="");rxCard.style.display="none";};
+
+    // عدّ الوصفات السريرية (مثل story-count في dashboard)
+    let rxCount = 0;
+    const rxCountElement = document.getElementById("rx-count");
+    // عرض تاريخ اليوم (مثل dashboard.html تمامًا، تاريخ فقط بدون وقت)
+    const todayDate = document.getElementById("today-date");
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    todayDate.textContent = new Date().toLocaleDateString('ar-EG', options);
+
+    genBtn.onclick=async()=>{
+      const age=document.getElementById("p_age").value.trim();
+      const gender=document.getElementById("p_gender").value;
+      const diagnosis=document.getElementById("p_diagnosis").value.trim();
+      if(!age||!gender||!diagnosis){alert("⚠️ يرجى إدخال العمر، الجنس والتشخيص");return;}
+
+      setStatus(true);
+      rxCard.style.display="block";
+      rxTableArea.innerHTML="<p><i class='fas fa-spinner fa-spin'></i> جاري التوليد...</p>";
+      rxRaw.style.display="none";
+
+      const weight=document.getElementById("p_weight").value.trim();
+      const status=document.getElementById("p_status").value;
+      const severity=document.getElementById("p_severity").value;
+      const trimester=document.getElementById("p_trimester").value;
+      const conditions=document.getElementById("p_conditions").value.trim();
+      const allergy=document.getElementById("p_allergy").value.trim();
+      const current=document.getElementById("p_current").value.trim();
+
+      const prompt=`أنت مساعد طبي. أعطني فقط JSON لمصفوفة أدوية.
+[
+ { "name":"اسم الدواء","trade_name":"","form":"","dose":"","frequency":"","duration":"","instructions":"","confidence":"High/Moderate/Low" }
+]
+بيانات المريض: العمر:${age}، الوزن:${weight||"غير محدد"}، الجنس:${gender}، حالة:${status||"لا"}، ثلث الحمل:${trimester||"لا"}، شدة:${severity||"غير محدد"}، أمراض:${conditions||"لا"}، تحسس:${allergy||"لا"}، أدوية:${current||"لا"}، التشخيص:${diagnosis}`;
+
+      try{
+        const completion=await puter.ai.chat([{role:"user",content:prompt}],{model:"gpt-5"});
+        let raw="";
+        if(completion?.message?.content){raw=completion.message.content;}
+        else if(completion?.output_text){raw=completion.output_text;}
+        else{raw=JSON.stringify(completion);}
+        const match=raw.match(/\[.*\]/s);
+        let meds=null;
+        if(match){try{meds=JSON.parse(match[0]);}catch{}}
+
+        if(Array.isArray(meds)){
+          rxMeta.innerHTML='✅ <i class="fas fa-check-circle" style="margin-left: 0.5rem; color: var(--conf-high);"></i> تم التوليد';
+          rxTableArea.innerHTML=renderTable(meds);
+          rxRaw.style.display="none";
+          copyRx.dataset.json=JSON.stringify(meds,null,2);
+          // تحديث العداد عند النجاح (مثل dashboard، لكن async)
+          rxCount++;
+          rxCountElement.textContent = rxCount;
+        }else{
+          rxMeta.innerHTML='⚠️ <i class="fas fa-exclamation-triangle" style="margin-left: 0.5rem; color: var(--conf-low);"></i> النموذج لم يُرجع JSON صالح — عرض النص الخام:';
+          rxTableArea.innerHTML="";
+          rxRaw.style.display="block";
+          rxRaw.innerHTML="<pre>"+escapeHtml(raw)+"</pre>";
+        }
+      }catch(e){
+        rxMeta.innerHTML='⚠️ <i class="fas fa-times-circle" style="margin-left: 0.5rem; color: var(--conf-low);"></i> خطأ: ' + e.message;
+        rxTableArea.innerHTML="";
+      }finally{setStatus(false);}
+    };
+
+    function renderTable(meds){
+      let html="<table class='rx-table'><thead><tr>" +
+        "<th data-label='الدواء'><i class='fas fa-pills'></i> الدواء</th>" +
+        "<th data-label='الشكل'><i class='fas fa-capsules'></i> الشكل</th>" +
+        "<th data-label='الجرعة'><i class='fas fa-weight-hanging'></i> الجرعة</th>" +
+        "<th data-label='التكرار'><i class='fas fa-repeat'></i> التكرار</th>" +
+        "<th data-label='المدة'><i class='fas fa-clock'></i> المدة</th>" +
+        "<th data-label='تعليمات'><i class='fas fa-info-circle'></i> تعليمات</th>" +
+        "<th data-label='الثقة'><i class='fas fa-star'></i> الثقة</th>" +
+        "</tr></thead><tbody>";
+      meds.forEach(m=>{
+        let confClass="conf-low";
+        if((m.confidence||"").toLowerCase().includes("high")) confClass="conf-high";
+        else if((m.confidence||"").toLowerCase().includes("moderate")) confClass="conf-moderate";
+        html+=`<tr>
+          <td data-label='الدواء'><strong>${escapeHtml(m.name||"")}</strong>${m.trade_name?("<div class='muted'>"+escapeHtml(m.trade_name)+"</div>"):""}</td>
+          <td data-label='الشكل'>${escapeHtml(m.form||"")}</td>
+          <td data-label='الجرعة'>${escapeHtml(m.dose||"")}</td>
+          <td data-label='التكرار'>${escapeHtml(m.frequency||"")}</td>
+          <td data-label='المدة'>${escapeHtml(m.duration||"")}</td>
+          <td data-label='تعليمات'>${escapeHtml(m.instructions||"")}</td>
+          <td data-label='الثقة' class="${confClass}"><i class='fas fa-star' style='margin-right: 0.3rem;'></i> ${escapeHtml(m.confidence||"")}</td>
+        </tr>`;
+      });
+      html+="</tbody></table>";
+      return html;
+    }
+
+    function escapeHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+    copyRx.onclick=()=>{navigator.clipboard.writeText(copyRx.dataset.json||"").then(()=>alert("<i class='fas fa-check'></i> تم النسخ بنجاح")).catch(()=>alert("حدث خطأ في النسخ"));}
+    printRx.onclick=()=>{window.print();};
+
+    // كود الـDark Mode التلقائي
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // كشف تلقائي عند التحميل
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+
+    // استجابة لتغيير تفضيلات النظام (تلقائي)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      applyTheme(e.matches ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

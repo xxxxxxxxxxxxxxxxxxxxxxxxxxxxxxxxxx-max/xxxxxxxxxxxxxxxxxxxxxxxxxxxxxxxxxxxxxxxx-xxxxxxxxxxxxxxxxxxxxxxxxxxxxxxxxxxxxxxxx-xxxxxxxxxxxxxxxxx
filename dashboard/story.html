@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>قسم القصة السريرية - طبيبي</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables للـThemes (مدمج من dashboard.html مع الصفحة الحالية) */
+    :root {
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --secondary-text: #666;
+      --border-color: #d1d5db;
+      --primary-blue: #1e88e5;
+      --button-bg: #1e88e5;
+      --button-hover: #1565c0;
+      --secondary-button-bg: #f1f1f1;
+      --secondary-button-hover: #ddd;
+      --success-green: #4caf50;
+      --shadow-light: rgba(0,0,0,0.05);
+      --icon-color: #1e88e5;
+      --animated-text-color: #60a5fa;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --secondary-text: #b0b0b0;
+      --border-color: #4b5563;
+      --primary-blue: #0d47a1;
+      --button-bg: #0d47a1;
+      --button-hover: #1565c0;
+      --secondary-button-bg: #2a2a2a;
+      --secondary-button-hover: #3a3a3a;
+      --success-green: #388e3c;
+      --shadow-light: rgba(255,255,255,0.05);
+      --icon-color: #90caf9;
+      --animated-text-color: #a5b4fc;
+    }
+  /* منع تحديد النص في كامل الموقع */
+ * {
+    -webkit-user-select: none;  /* Safari */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge */
+    user-select: none;          /* Non-prefixed version */
+ }
+
+/* استثناء لحقول الإدخال والنصوص حتى يتمكن المستخدم من الكتابة */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;  /* Safari */
+    -moz-user-select: text;     /* Firefox */
+    -ms-user-select: text;      /* Internet Explorer/Edge */
+    user-select: text;          /* Non-prefixed version */
+ }
+
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    a { text-decoration: none; }
+
+    /* الهيدر (مدمج من dashboard.html مع تعديل: زر رجوع) */
+    header {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+
+    header .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    header small {
+      font-size: 13px;
+      color: #e3f2fd;
+      margin-top: 2px;
+    }
+
+    /* زر الرجوع (بدلاً من hamburger) */
+    #back-btn {
+      font-size: 26px;
+      background: var(--secondary-button-bg);
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px 10px;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+      font-weight: bold;
+    }
+
+    #back-btn:hover { 
+      background: var(--secondary-button-hover);
+    }
+
+    /* الفوتر (مدمج من dashboard.html) */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: var(--primary-blue);
+      color: #fff;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      margin-top: auto; /* لدفع الفوتر للأسفل */
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* النص المتحرك */
+    #typing-phrase {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--animated-text-color);
+      margin: 20px auto;
+      padding: 15px 20px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.05));
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    [data-theme="dark"] #typing-phrase {
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.1), rgba(165, 180, 252, 0.05));
+    }
+
+    #typing-phrase.show {
+      opacity: 1;
+      animation: fadeGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); text-shadow: 0 0 5px rgba(96, 165, 250, 0.3); }
+      50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
+    }
+
+    /* مربعات التاريخ والعد */
+    .info-boxes {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .info-boxes div {
+      flex: 1;
+      background: var(--secondary-button-bg);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px var(--shadow-light);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .info-boxes h4 {
+      margin-bottom: 10px;
+      color: var(--primary-blue);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: color 0.3s;
+    }
+
+    .info-boxes h4 i {
+      font-size: 20px;
+      color: var(--icon-color);
+    }
+
+    .info-boxes p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    /* الأزرار */
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px var(--shadow-light);
+      text-align: center;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      transition: background-color 0.3s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-green {
+      background: var(--success-green);
+      color: #fff;
+    }
+
+    .btn-green:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--secondary-button-hover);
+      transform: translateY(-2px);
+    }
+
+    /* الـ Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+      transition: background-color 0.3s;
+      color: var(--text-color);
+    }
+
+    .modal-content h3 {
+      margin-bottom: 20px;
+      color: var(--primary-blue);
+      transition: color 0.3s;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* أزرار الـ Modal كروابط احترافية */
+    .modal-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .modal-link {
+      display: block;
+      padding: 14px 20px;
+      border-radius: 10px;
+      text-decoration: none; /* إزالة الخط من تحت الروابط */
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 2px solid transparent;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-decoration: none; /* التأكيد على عدم وجود خط */
+    }
+
+    .modal-link i {
+      margin-left: 8px; /* في RTL، مسافة بعد النص */
+      font-size: 18px;
+    }
+
+    /* ألوان احترافية للروابط */
+    .modal-link.primary {
+      background: linear-gradient(135deg, var(--primary-blue), #42a5f5);
+    }
+
+    .modal-link.primary:hover {
+      background: linear-gradient(135deg, var(--button-hover), var(--primary-blue));
+    }
+
+    .modal-link.cancel {
+      background: linear-gradient(135deg, #757575, #9e9e9e);
+      color: #fff;
+      border: 2px solid #9e9e9e;
+    }
+
+    .modal-link.cancel:hover {
+      background: linear-gradient(135deg, #616161, #757575);
+      border-color: #616161;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header { padding: 10px 15px; }
+      header h1 { font-size: 20px; }
+      #back-btn { font-size: 18px; padding: 8px 12px; }
+      .info-boxes { flex-direction: column; }
+      #typing-phrase { font-size: 18px; padding: 10px 15px; min-height: 50px; margin: 10px auto; }
+      .btn { width: 100%; margin: 5px 0; }
+      main { padding: 10px; }
+      .modal-content { width: 95%; padding: 15px; }
+      .modal-link { padding: 12px 15px; font-size: 15px; }
+      footer { padding: 10px; font-size: 12px; }
+    }
+
+    /* Dark Mode تحسينات (مدمج من dashboard.html) */
+    [data-theme="dark"] .info-boxes div {
+      background: var(--secondary-button-bg);
+      box-shadow: 0 2px 6px var(--shadow-light);
+    }
+
+    [data-theme="dark"] .info-boxes h4 {
+      color: var(--primary-blue);
+    }
+
+    [data-theme="dark"] .info-boxes h4 i {
+      color: var(--icon-color);
+    }
+
+    [data-theme="dark"] .card {
+      background: var(--card-bg);
+    }
+
+    [data-theme="dark"] .modal-content {
+      background: var(--card-bg);
+    }
+
+    [data-theme="dark"] .modal-link.primary {
+      background: linear-gradient(135deg, var(--primary-blue), #90caf9);
+    }
+
+    [data-theme="dark"] .modal-link.primary:hover {
+      background: linear-gradient(135deg, var(--button-hover), var(--primary-blue));
+    }
+
+    [data-theme="dark"] .modal-link.cancel {
+      background: linear-gradient(135deg, #424242, #616161);
+      border-color: #616161;
+      color: #e0e0e0;
+    }
+
+    [data-theme="dark"] .modal-link.cancel:hover {
+      background: linear-gradient(135deg, #2c2c2c, #424242);
+      border-color: #424242;
+    }
+
+    [data-theme="dark"] .modal-link {
+      box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    }
+
+    [data-theme="dark"] .modal-link:hover {
+      box-shadow: 0 4px 15px rgba(255,255,255,0.15);
+    }
+
+    [data-theme="dark"] input,
+    [data-theme="dark"] select,
+    [data-theme="dark"] textarea {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    [data-theme="dark"] input::placeholder,
+    [data-theme="dark"] textarea::placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input::-webkit-input-placeholder,
+    [data-theme="dark"] textarea::-webkit-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input:-ms-input-placeholder,
+    [data-theme="dark"] textarea:-ms-input-placeholder {
+      color: var(--secondary-text) !important;
+    }
+
+    [data-theme="dark"] input[readonly],
+    [data-theme="dark"] input[readonly="readonly"] {
+      background: var(--card-bg) !important;
+      color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] #back-btn {
+      background: var(--secondary-button-bg);
+      color: var(--text-color);
+    }
+
+    [data-theme="dark"] #back-btn:hover {
+      background: var(--secondary-button-hover);
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+  <!-- الهيدر (مدمج ومعدل من dashboard.html) -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-stethoscope"></i> طبيبي</h1>
+      <small>أول تطبيق ذكاء اصطناعي طبي في سوريا</small>
+    </div>
+    <button id="back-btn">
+      <i class="fas fa-arrow-left"></i>    
+    </button>
+  </header>
+
+  <main>
+    <!-- النص المتحرك -->
+    <div id="typing-phrase"></div>
+
+    <!-- مربعات المعلومات -->
+    <div class="info-boxes">
+      <div>
+        <h4><i class="fas fa-clock"></i>تاريخ اليوم</h4>
+        <p id="today-date"></p>
+      </div>
+      <div>
+        <h4><i class="fas fa-file-medical"></i>عدد القصص</h4>
+        <p id="story-count">0</p>
+      </div>
+    </div>
+
+    <!-- الأزرار (أزلت زر تحميل القصة، حافظت على زر إضافة فقط) -->
+    <div class="card">
+      <button class="btn btn-green" id="addStoryBtn">
+        <i class="fas fa-plus"></i>إضافة قصة سريرية جديدة
+      </button>
+    </div>
+  </main>
+
+  <!-- الـ Modal لأنواع القصص -->
+  <div class="modal" id="storyModal">
+    <div class="modal-content">
+      <h3>لمن القصة؟</h3>
+      <div class="modal-links">
+        <a href="stories/internal.html" class="modal-link primary">
+          <i class="fas fa-user-md"></i>داخلية عامة / جراحة
+        </a>
+        <a href="stories/neonatal.html" class="modal-link primary">
+          <i class="fas fa-baby"></i>أطفال
+        </a>
+        <a href="stories/gyncology.html" class="modal-link primary">
+          <i class="fas fa-female"></i>نسائية
+        </a>
+        <a href="#" class="modal-link cancel" id="closeModal">
+          <i class="fas fa-times"></i>إلغاء
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- الفوتر (مدمج من dashboard.html) -->
+  <footer>© جميع الحقوق محفوظة لـ Kasp-ai</footer>
+
+  <script>
+    // معالج زر الرجوع (جديد: يعود إلى الصفحة السابقة أو dashboard.html)
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.getElementById('back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          if (window.history.length > 1) {
+            window.history.back(); // إذا كان هناك تاريخ، ارجع للخلف
+          } else {
+            window.location.href = 'dashboard.html'; // إلا، اذهب إلى dashboard
+          }
+        });
+      }
+    });
+
+    // النصوص المتحركة (شملت النص المطلوب)
+    const phrases = [
+      "<i class='fas fa-stethoscope'></i> مرحباً بك في قسم القصة السريرية في تطبيق طبيبي",
+      "<i class='fas fa-user-md'></i> هنا يمكنك أخذ القصة السريرية بكل احترافية",
+      "<i class='fas fa-brain'></i> وتحليلها باستخدام أحدث تقنيات الذكاء الصنعي"
+    ];
+    let phraseIndex = 0;
+    const typingPhrase = document.getElementById("typing-phrase");
+    function showPhrase() {
+      typingPhrase.classList.remove("show");
+      setTimeout(() => {
+        typingPhrase.innerHTML = phrases[phraseIndex];
+        typingPhrase.classList.add("show");
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }, 500);
+    }
+    setInterval(showPhrase, 4000);
+    showPhrase(); // تشغيل أول نص
+
+    // عرض تاريخ اليوم الحالي
+    const todayDate = document.getElementById("today-date");
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    todayDate.textContent = new Date().toLocaleDateString('ar-EG', options); // مثل: ٢٥ سبتمبر ٢٠٢٥
+
+    // عدّ القصص السريرية
+    let storyCount = 0;
+    const storyCountElement = document.getElementById("story-count");
+    const addStoryBtn = document.getElementById("addStoryBtn");
+    const modal = document.getElementById("storyModal");
+    const closeModal = document.getElementById("closeModal");
+
+    // فتح الـ Modal عند الضغط على زر الإضافة
+    addStoryBtn.addEventListener("click", () => {
+      // زيادة العدد (يمكن إزالة هذا إذا لم تريد زيادة حتى اختيار نوع)
+      storyCount++;
+      storyCountElement.textContent = storyCount;
+      modal.style.display = "flex"; // فتح الـ Modal
+      console.log('تم فتح قائمة أنواع القصص السريرية');
+    });
+
+    // إغلاق الـ Modal
+    closeModal.addEventListener("click", (e) => {
+      e.preventDefault(); // منع التوجيه الافتراضي
+      modal.style.display = "none";
+    });
+
+    // إغلاق الـ Modal عند الضغط خارجه
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    // Dark Mode تلقائي
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => applyTheme(e.matches ? 'dark' : 'light'));
+  </script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const internalLinks = document.querySelectorAll('a[href*="localhost"], a[href*=".html"]');
+    
+    internalLinks.forEach(link => {
+        link.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+});
+</script>
+</body>
+</html>
